@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/home/brendan/work/randwick/app/views'
+let g:netrw_dirhist_2='/home/brendan/work/randwick/app/views/reports'
+let g:netrw_dirhist_3='/home/brendan/work/assurety/assurety/templates'
