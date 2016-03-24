@@ -1,0 +1,6 @@
+alias ls="ls --color=auto"
+alias ll="ls -l"
+alias la="ls -la"
+alias ack='ACK_PAGER_COLOR="less -x4SRFX" /usr/bin/vendor_perl/ack'
+alias gpr="git pull --rebase -v"
+eval $(thefuck --alias)
