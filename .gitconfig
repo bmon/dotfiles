@@ -1,24 +1,26 @@
 [user]
-	name = Brendan Roy
-	email = br3ndanr@gmail.com
+    name = Brendan Roy
+    email = br3ndanr@gmail.com
 [core]
-	editor = vim
+    editor = vim
 [color]
-	status = auto
-	diff = auto
-	branch = auto
-	interactive = auto
-[url "https://github.com/"]
-	insteadOf = git://github.com/
+    status = auto
+    diff = auto
+    branch = auto
+    interactive = auto
 [push]
-	default = simple
+    default = simple
 [log]
-	decorate = true
+    decorate = true
 [alias]
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     pat = add --patch
     undo = reset --soft HEAD^
 [credential]
-	helper = cache --timeout=43200
+    helper = cache --timeout=43200
+
+[url "https://github.com/"]
+    insteadOf = gh:
+    insteadOf = git://github.com/
