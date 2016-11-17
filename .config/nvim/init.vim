@@ -1,51 +1,39 @@
 "Brendan Roy's .vimrc
+call plug#begin('~/.config/nvim/')
 
-set nocompatible              " be improved, required
-filetype off                  " required
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } "async keyword completion
+Plug 'zchee/deoplete-jedi' "python autocompletes with deoplete
+Plug 'neomake/neomake' "syntax check & lint
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-"alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+Plug 'vim-airline/vim-airline' "statusline prettifier
+Plug 'vim-airline/vim-airline-themes' "statusline prettifier
+Plug 'kchmck/vim-coffee-script' "coffee highlighting and completion
+Plug 'sukima/xmledit' "xml tag completion
 
-Plugin 'easymotion/vim-easymotion'
-Plugin 'gmarik/Vundle.vim' "let Vundle manage Vundle, required
-Plugin 'Valloric/YouCompleteMe' "Autocompletion
-Plugin 'vim-airline/vim-airline' "statusline prettifier
-Plugin 'vim-airline/vim-airline-themes' "statusline prettifier
-Plugin 'scrooloose/syntastic' "Syntax highlighting and errors
-Plugin 'airblade/vim-gitgutter' "Shows file diff while editing
-Plugin 'tpope/vim-unimpaired' "Extra commands
-Plugin 'tpope/vim-fugitive' "Git plugin
-Plugin 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
-Plugin 'fatih/vim-go'       "Golang autocompetion, go fmt on write, etc
-Plugin 'kchmck/vim-coffee-script' "coffee highlighting and completion
-Plugin 'sukima/xmledit' "xml tag completion
-Plugin 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
-Plugin 'mileszs/ack.vim' "use ack in vim
-Plugin 'ctrlpvim/ctrlp.vim' "ctrl p fuzzy search
+Plug 'easymotion/vim-easymotion' "jump around vim with leader leader
+Plug 'airblade/vim-gitgutter' "Shows file diff while editing
+Plug 'tpope/vim-fugitive' "Git plugin
+Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
+Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
+Plug 'mileszs/ack.vim' "use ack in vim
+Plug 'ctrlpvim/ctrlp.vim' "ctrl p fuzzy search
+call plug#end()
 
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+filetype plugin indent on
 
 "Beautiful Syntax highlighting
 colorscheme jellybeans
 
-" Don't pester about ycm extra conf. (for clang completion)
-let g:ycm_confirm_extra_conf = 0
-" Close preview window after we select an option
-let g:ycm_autoclose_preview_window_after_completion = 1
-" Make ycm use pyenv
-let g:ycm_path_to_python_interpreter = '/home/brendan/.pyenv/shims/python'
-
 " Always show statusline
 set laststatus=2
-" Use 256 colours (Use this setting only if your terminal supports 256
-" colours)
-set t_Co=256
+
+" Use Deoplete.
+let g:deoplete#enable_at_startup = 1
+
+" Let <Tab> also do completion
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -61,14 +49,6 @@ let g:gitgutter_sign_column_always = 1
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-" While pylint is nice, I don't always want to run it on write.
-let g:syntastic_python_checkers = ['flake8']
 
 " ctrlp
 let g:ctrlp_map = '<c-o>'
@@ -153,7 +133,8 @@ map <C-p> "+p
 map <C-Right> :bnext <CR>
 map <C-Left> :bprevious <CR>
 
-map <F3> :YcmCompleter GoTo<CR>
+"quicky close buffers
+map <C-w> :bd <CR>
 
 "Folds
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>

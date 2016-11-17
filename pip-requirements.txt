@@ -1,0 +1,4 @@
+neovim
+jedi
+virtualenv
+virtualenvwrapper
