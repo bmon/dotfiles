@@ -50,14 +50,16 @@ HIST_STAMPS="dd/mm/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pyenv)
+plugins=(git zsh-autosuggestions)
 
 # User configuration
+export PATH="/bin:/home/brendan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
 
-  export PATH="/bin:/home/brendan/.pyenv/bin:/home/brendan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/brendan/.rvm/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
+export WORKON_HOME=~/.venv/
+source /usr/bin/virtualenvwrapper.sh
 
 source $ZSH/oh-my-zsh.sh
+source ~/.profile
 
 # Add aliases.
 if [ -f ~/.aliases ]; then
@@ -66,10 +68,6 @@ fi
 
 #keychain
 eval `keychain --eval --agents ssh id_rsa`
-
-# Load pyenv
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 #golang
 export GOPATH="$HOME/go"
@@ -111,11 +109,13 @@ bindkey "${terminfo[khome]}" beginning-of-line
 bindkey "${terminfo[kend]}" end-of-line
 bindkey -e
 
+bindkey "^ " autosuggest-execute
+
 # This should always be run last -- connect to tmux
 # if you kill the tmux server or close the last session it will drop
 # back to zsh
 if [[ -z "$TMUX" ]]; then
-    tmux -2 attach
+    tmux -2 new-session -As main
     tmux has-session &> /dev/null
     if [ $? -eq 1 ]; then
         echo "Tmux was killed, dropping back to zsh"
