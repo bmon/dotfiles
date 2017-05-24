@@ -1,0 +1,24 @@
+#!/bin/bash
+TARGETSTRING=" | xclip -selection clipboard -t image/png"
+CMDSTRING="maim -s"
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        --capturewindow)
+            CMDSTRING="maim -t9999999 -s"
+            shift # past argument
+            ;;
+        --imgur)
+            TARGETSTRING=" tmp.png; imgur tmp.png; rm tmp.png"
+            shift
+            ;;
+        *)
+            # unknown option
+            ;;
+    esac
+    shift # past argument or value
+done
+eval "$CMDSTRING$TARGETSTRING"
+play -n synth 0.1 sine 400 vol 0.5 > /dev/null 2>&1
+play -n synth 0.1 sine 400 vol 0.5 > /dev/null 2>&1
