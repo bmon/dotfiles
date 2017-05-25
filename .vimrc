@@ -1,51 +1,42 @@
 "Brendan Roy's .vimrc
+call plug#begin('~/.vim/plugged')
 
-set nocompatible              " be improved, required
-filetype off                  " required
+Plug 'Valloric/YouCompleteMe' "Autocompletion.
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-"alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+Plug 'vim-airline/vim-airline' "statusline prettifier
+Plug 'vim-airline/vim-airline-themes' "statusline prettifier
+Plug 'kchmck/vim-coffee-script' "coffee highlighting and completion
+Plug 'sukima/xmledit' "xml tag completion
 
-Plugin 'easymotion/vim-easymotion'
-Plugin 'gmarik/Vundle.vim' "let Vundle manage Vundle, required
-Plugin 'Valloric/YouCompleteMe' "Autocompletion
-Plugin 'vim-airline/vim-airline' "statusline prettifier
-Plugin 'vim-airline/vim-airline-themes' "statusline prettifier
-Plugin 'scrooloose/syntastic' "Syntax highlighting and errors
-Plugin 'airblade/vim-gitgutter' "Shows file diff while editing
-Plugin 'tpope/vim-unimpaired' "Extra commands
-Plugin 'tpope/vim-fugitive' "Git plugin
-Plugin 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
-Plugin 'fatih/vim-go'       "Golang autocompetion, go fmt on write, etc
-Plugin 'kchmck/vim-coffee-script' "coffee highlighting and completion
-Plugin 'sukima/xmledit' "xml tag completion
-Plugin 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
-Plugin 'mileszs/ack.vim' "use ack in vim
-Plugin 'ctrlpvim/ctrlp.vim' "ctrl p fuzzy search
+Plug 'easymotion/vim-easymotion' "jump around vim with leader leader
+Plug 'airblade/vim-gitgutter' "Shows file diff while editing
+Plug 'tpope/vim-fugitive' "Git plugin
+Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
+Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
+Plug 'mileszs/ack.vim' "use ack in vim
+Plug 'ctrlpvim/ctrlp.vim' "ctrl p fuzzy search
+Plug 'flazz/vim-colorschemes'
 
+call plug#end()
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+filetype plugin indent on
 
 "Beautiful Syntax highlighting
 colorscheme jellybeans
 
-" Don't pester about ycm extra conf. (for clang completion)
-let g:ycm_confirm_extra_conf = 0
-" Close preview window after we select an option
-let g:ycm_autoclose_preview_window_after_completion = 1
-" Make ycm use pyenv
-let g:ycm_path_to_python_interpreter = '/home/brendan/.pyenv/shims/python'
-
 " Always show statusline
 set laststatus=2
-" Use 256 colours (Use this setting only if your terminal supports 256
-" colours)
-set t_Co=256
+
+"" Use Deoplete.
+"let g:deoplete#enable_at_startup = 1
+
+" YCM config
+let g:ycm_python_binary_path = 'python'
+let g:ycm_keep_logfiles = 1
+
+" Let <Tab> also do completion
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -57,18 +48,10 @@ let g:gitgutter_realtime = 1
 let g:gitgutter_eager = 1
 let g:gitgutter_sign_column_always = 1
 
-"Syntastic Config
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-" While pylint is nice, I don't always want to run it on write.
-let g:syntastic_python_checkers = ['flake8']
+""Syntastic Config
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
 " ctrlp
 let g:ctrlp_map = '<c-o>'
@@ -101,6 +84,8 @@ set laststatus=2
 set confirm
 set cmdheight=2
 set number
+set tenc=utf8
+set ttyfast
 set notimeout ttimeout ttimeoutlen=200
 map Y y$
 set whichwrap+=<,>,h,l,[,]
@@ -120,7 +105,7 @@ set noswapfile
 "Indentation
 set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 au FileType java setl sw=8 ts=4 sts=8 expandtab!
-au FileType html,css,scss,scss.css,javascript setl sw=2 ts=2 sts=2
+au FileType html,css,scss,scss.css,javascript,coffee setl sw=2 ts=2 sts=2
 
 " Gray column at 80 chars
 hi ColorColumn guibg=#242424 ctermbg=234
@@ -137,13 +122,22 @@ cnoreabbrev ag Ack!
 "exists.
 set switchbuf=usetab
 
-set fillchars="fold: "
-set foldmethod=indent
-autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax
-autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR
-
 "Remove trailing whitespace on save
 autocmd BufWritePre * :%s/\s\+$//e
+
+"Create required parent directores on buffer write
+function! s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+        let dir=fnamemodify(a:file, ':h')
+        if !isdirectory(dir)
+            call mkdir(dir, 'p')
+        endif
+    endif
+endfunction
+augroup BWCCreateDir
+    autocmd!
+    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END
 
 "system copy and paste binds
 map <C-y> "+y
@@ -153,8 +147,20 @@ map <C-p> "+p
 map <C-Right> :bnext <CR>
 map <C-Left> :bprevious <CR>
 
-map <F3> :YcmCompleter GoTo<CR>
+"quicky close buffers
+map <C-w> :bd <CR>
+
+" Map goto to something useful
+map <Leader>f :YcmCompleter GoTo <CR>
 
 "Folds
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
+
+set fillchars="fold: "
+set foldmethod=indent
+autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
+autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,djangohtml normal zR
+"
+" open all folds, then close the top level folds only
+autocmd BufReadPost * :silent! %foldo! | silent! %foldc

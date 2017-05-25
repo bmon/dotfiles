@@ -1,11 +1,14 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/brendan/.oh-my-zsh
+export ZSH=/home/brendan/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="agnoster"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs virtualenv time)
+ZSH_THEME="powerlevel9k/powerlevel9k"
+
 DEFAULT_USER="$USER"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -28,7 +31,7 @@ DEFAULT_USER="$USER"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+#ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -50,28 +53,18 @@ HIST_STAMPS="dd/mm/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions)
+plugins=(git zsh-autosuggestions virtualenvwrapper  virtualenv zsh-autosuggestions)
+
+bindkey '^ ' autosuggest-execute
 
 # User configuration
 export PATH="/bin:/home/brendan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
 
-export WORKON_HOME=~/.venv/
-source /usr/bin/virtualenvwrapper.sh
-
 source $ZSH/oh-my-zsh.sh
 source ~/.profile
+source ~/.aliases
 
-# Add aliases.
-if [ -f ~/.aliases ]; then
-    source ~/.aliases
-fi
 
-#keychain
-eval `keychain --eval --agents ssh id_rsa`
-
-#golang
-export GOPATH="$HOME/go"
-export PATH="$PATH:$GOPATH/bin"
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 setopt histignorealldups
