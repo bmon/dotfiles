@@ -104,6 +104,11 @@ bindkey -e
 
 bindkey "^ " autosuggest-execute
 
+# virtualenvwrapper hack - the zsh plugin looks for viable virtualenvs
+# on cd however does not do so for the initial directory the shell
+# is spawned into.
+cd .
+
 # This should always be run last -- connect to tmux
 # if you kill the tmux server or close the last session it will drop
 # back to zsh

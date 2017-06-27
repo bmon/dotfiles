@@ -3,6 +3,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'Valloric/YouCompleteMe' "Autocompletion.
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
+Plug 'andviro/flake8-vim' "python flake checking
+
 
 Plug 'vim-airline/vim-airline' "statusline prettifier
 Plug 'vim-airline/vim-airline-themes' "statusline prettifier
@@ -52,6 +54,10 @@ let g:gitgutter_sign_column_always = 1
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
+
+" flake8-vim
+" ignore: line len, blank linke after class decl, assigned lambdas
+let g:PyFlakeDisabledMessages = 'E501,E309,E731'
 
 " ctrlp
 let g:ctrlp_map = '<c-o>'
