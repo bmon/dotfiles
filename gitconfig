@@ -1,0 +1,83 @@
+[user]
+    name = Brendan Roy
+    email = br3ndanr@gmail.com
+    signingkey = Brendan Roy <br3ndanr@gmail.com>
+[core]
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[commit]
+	gpgsign = true
+[push]
+    default = current
+	followTags = true
+[log]
+    decorate = true
+# I _frequently_ use the following commands - these are some of the best
+# parts of my gitconfig.
+#
+# `git lg` displays a repository's commit log with a graph depicting branches
+# and other nice features like relative time and tags. I use this more often
+# than `git log`, however `git log` remains useful for inspecting commits in
+# more detailed manner.
+#
+# `git add --patch` is absolutely my number 1 favorite command (thank you
+# @LiamKeene for converting me). It allows you to interactively stage portions
+# of changed files for commit. This is an incredible tool, as it allows you to
+# both doublecheck all your changes in a commit, as well as break a large set
+# of updates into smaller, logical commits. Additionally, this will help
+# you catch unintentional changes, such as accidentally adding/removing lines
+# or characters, or leaving debug breakpoints in code.
+# I cannot reccomend this command enough. I use it extremely frequently, and
+# as such have aliased it to `git pat`.
+#
+# I really like the output format of `branch -vv` so I've aliased it to `br`.
+[alias]
+    lg = log --color --graph --pretty=format:'%C(magenta)%h%Creset %C(bold blue)<%an>%Creset %C(dim red)%cr%Creset - %s%C(yellow)%d%Creset' --abbrev-commit
+    pat = add --patch
+    br = branch -vv
+
+# this will cause git to remember credentials for 43200 seconds (12 hours)
+[credential]
+    helper = cache --timeout=43200
+
+# which program to use when signing commits and tags
+[gpg]
+	program = gpg
+
+
+# the next two definitions are shorthand for upstream sources, eg:
+#  `git clone gh:bmon/dotfiles`
+# instead of
+#  `git clone git@github.com:bmon/dotfiles`
+#
+# I haven't seen much reference to using `insteadOf` like this at all, but it
+# hasn't broken anything for me since I added this setting in 2015.
+[url "git@github.com:"]
+    insteadOf = gh:
+
+[url "git@source.servian.com:"]
+    insteadOf = serv:
+
+# I have a second gitconfig located at ~/git/servian/.gitconfig
+# which defines additional settings, specific to servian repositories
+# (different public key, different email, etc)
+[inclideIf "gitdir:~/git/servian/"]
+    path = ~/git/servian/.gitconfig
+[color]
+    status = auto
+    diff = auto
+    branch = auto
+    interactive = auto
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
