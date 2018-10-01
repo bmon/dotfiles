@@ -21,11 +21,11 @@ for FILENAME in $(find * -type f); do
 
     LINKNAME="$HOME/.$FILENAME"
     if [ $FILENAME -ef $LINKNAME ]; then
-        echo $FILENAME already linked to $LINKNAME
+        echo -e "\e[2m$FILENAME already linked to $LINKNAME\e[0m"
         continue
     fi
 
-    echo "Installing $FILENAME to $LINKNAME"
+    echo  -e "\e[94mInstalling $FILENAME to $LINKNAME\e[0m"
 
     if [ -e $LINKNAME ]; then
       # make a backup of the file(s), with a confirm override if necessary
