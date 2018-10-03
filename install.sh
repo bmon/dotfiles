@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IGNORE=('install.sh' 'backup*')
+IGNORE=('install.sh' 'README.md' 'register.sh' 'backup*')
 
 containsElement () {
   local e match="$1"
