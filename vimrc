@@ -79,6 +79,7 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
+let g:syntastic_ruby_checkers = ['rubocop']
 let g:syntastic_typescript_checkers = ['tslint']
 let g:syntastic_typescript_tslint_exe = 'npx tslint'
 
@@ -149,7 +150,7 @@ let g:html_indent_inctags = 'dd'
 
 " Gray column at 80 chars
 hi ColorColumn guibg=#242424 ctermbg=234
-let &colorcolumn="80,".join(range(100,119),",").join(range(120,999),",")
+let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
 
 "when using :sb[next|previous], don't make a new window if one already
 "exists.
