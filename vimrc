@@ -92,39 +92,13 @@ let g:PyFlakeDisabledMessages = 'E501,E309,E731,C901'
 " fzf
 nnoremap <c-p> :FZF<cr>
 
-"" ctrlp
-"let g:ctrlp_map = '<c-o>'
-"let g:ctrlp_cmd = 'CtrlP'
-"
-"" use ripgrep as default in ctrlp
-"if executable('rg')
-"  set grepprg=rg\ --color=never
-"  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-"  let g:ctrlp_user_command = 'echo %s >> ctrlpsearches.txt && rg . --files --color=never --glob ""' " debugging
-"  " should be more than fast enough to allow for no cache requirement
-"  let g:ctrlp_use_caching = 0
-"endif
+let g:tmux_navigator_no_mappings = 1
 
-"" make ctrl-p ignore spaces in search query
-"let g:ctrlp_abbrev = {
-"  \ 'gmode': 'i',
-"  \ 'abbrevs': [
-"    \ {
-"      \ 'pattern': ' ',
-"      \ 'expanded': '',
-"      \ 'mode': 'pfrz',
-"    \ },
-"    \ ]
-"  \ }
-
-"Make vim be friends with tmux (arrows)
-if &term =~ '^screen'
-    " tmux will send xterm-style keys when its xterm-keys option is on
-    execute "set <xUp>=\e[1;*A"
-    execute "set <xDown>=\e[1;*B"
-    execute "set <xRight>=\e[1;*C"
-    execute "set <xLeft>=\e[1;*D"
-endif
+nnoremap <silent> <C-i> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-j> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-k> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
 
 "General settings
 filetype off
@@ -216,8 +190,8 @@ set clipboard=unnamed,unnamedplus
 "map <C-p> "+p
 
 "Swap Buffers fastlike
-map <C-Right> :bnext <CR>
-map <C-Left> :bprevious <CR>
+nnoremap <silent> <C-o> :bnext <CR>
+nnoremap <silent> <C-u> :bprevious <CR>
 
 "quicky close buffers
 map <C-w> :bd <bar> redraw! <CR>
@@ -225,11 +199,11 @@ map <C-w> :bd <bar> redraw! <CR>
 " Map goto to something useful
 map <Leader>f :YcmCompleter GoTo <CR>
 
-" I should really get used to using vim properly...
-inoremap <Up> <nop>
-inoremap <Down> <nop>
-inoremap <Right> <nop>
-inoremap <Left> <nop>
+" 60% keyboard not so crash hot so far
+map i <Up>
+map j <Left>
+map k <Down>
+noremap h i
 
 "Folds
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
