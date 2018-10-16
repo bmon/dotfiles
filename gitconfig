@@ -5,6 +5,7 @@
 [core]
 	pager = diff-so-fancy | less --tabs=4 -RFX
 [commit]
+    verbose = true
 	gpgsign = true
 [push]
     default = current
@@ -32,8 +33,20 @@
 # I really like the output format of `branch -vv` so I've aliased it to `br`.
 [alias]
     lg = log --color --graph --pretty=format:'%C(magenta)%h%Creset %C(bold blue)<%an>%Creset %C(dim red)%cr%Creset - %s%C(yellow)%d%Creset' --abbrev-commit
-    pat = add --patch
     br = branch -vv
+
+    # Today I discovered you can start an alias with ! to execute it as a shell
+    # function rather than a simple git alias. Pretty neat!
+
+    # git pat is git add --intent-to-add . which adds new files to tracking but
+    # doesn't stage their contents yet, then an add --patch afterward. This
+    # means I can now patch add new files (not just changed ones)!
+    pat = !git add -N . && git add --patch
+    # brdel fetches, then lists all the branches. Branches which are tracking
+    # a now deleted upstream branch are listed as ': gone'. If your upstream
+    # is squash merging branches, you can use this to delete those branches
+    # once they are deleted upstream. Very handy!
+    brdel = !git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
 
 # this will cause git to remember credentials for 43200 seconds (12 hours)
 [credential]
