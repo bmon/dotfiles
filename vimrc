@@ -28,7 +28,7 @@ Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
 "Plug 'mileszs/ack.vim' "use ack in vim
 Plug 'jremmen/vim-ripgrep'
 " Plug 'ctrlpvim/ctrlp.vim' "ctrl p fuzzy search - disabled in favor of fzf+rg
-Plug 'junegunn/fzf' "fzf search
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim' "fzf extensions for vim
 Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree'
@@ -106,6 +106,7 @@ filetype off
 set nocompatible
 filetype indent plugin on
 syntax on
+set autowrite
 set hidden
 set showcmd
 set hlsearch
@@ -187,8 +188,10 @@ augroup END
 " disabling these for now in favour of setting the default clipboard to the
 " system clipboard.
 set clipboard=unnamed,unnamedplus
+
 "map <C-y> "+y
 "map <C-p> "+p
+map <Leader>p gg"_dGP
 
 "Swap Buffers fastlike
 nnoremap <silent> <C-o> :bnext <CR>
@@ -213,7 +216,7 @@ vnoremap <Space> zf
 set fillchars="fold: "
 set foldmethod=indent
 autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
-autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,djangohtml normal zR
+set foldlevel=99
 "
 " open all folds, then close the top level folds only
 autocmd BufReadPost * :silent! %foldo! "| silent! %foldc

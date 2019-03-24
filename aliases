@@ -1,4 +1,8 @@
-alias ls="ls -G"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias ls="ls -G"
+fi
+alias ls="ls --color=auto"
+
 alias ll="ls -l"
 alias la="ls -la"
 alias rg="rg --ignore-case --hidden"
@@ -6,6 +10,7 @@ alias mkdirs="mkdir -p"
 alias pacman="sudo pacman"
 alias genpasswd="head -c 200 /dev/urandom | shasum | base64 | head -c 32 ; echo"
 alias ebprod="eb status app-production | awk '\$2 == \"Version:\" {print \$3}'"
+alias vim=nvim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 function mitmproxy() {

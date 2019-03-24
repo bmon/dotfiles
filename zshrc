@@ -109,3 +109,5 @@ if [[ -z "$TMUX" ]]; then
         exit
     fi
 fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
