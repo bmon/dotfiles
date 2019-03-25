@@ -4,8 +4,10 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'Valloric/YouCompleteMe' "Autocompletion.
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
-"Plug 'andviro/flake8-vim' "python flake checking - disabled due to incompatability with YCM
-Plug 'vim-syntastic/syntastic'
+
+Plug 'neomake/neomake'
+Plug 'jaawerth/nrun.vim'
+
 Plug 'tell-k/vim-autopep8'
 Plug 'dag/vim-fish' "fish syntax highlighting
 Plug 'pangloss/vim-javascript'
@@ -13,10 +15,7 @@ Plug 'leafgarland/typescript-vim' "typescript highlighting
 Plug 'tpope/vim-rails'
 Plug 'suan/vim-instant-markdown' "opens markdown files in a browser window
 Plug 'othree/html5.vim' " html5 completion and syntax and and formatting
-Plug 'ap/vim-css-color' " preview colors in source while editing
-Plug 'ejholmes/vim-forcedotcom' " highlighting for force.com classes, components etc...
-Plug 'darfink/vim-plist' " macos plist editing
-"Plug 'sheerun/vim-polyglot' " catchall completion and syntax
+Plug 'sheerun/vim-polyglot' " catchall completion and syntax
 
 Plug 'vim-airline/vim-airline' "statusline prettifier
 Plug 'vim-airline/vim-airline-themes' "statusline prettifier
@@ -42,11 +41,21 @@ call plug#end()
 filetype plugin indent on
 
 "Beautiful Syntax highlighting
-set t_Co=256
 colorscheme jellybeans
 
 " Always show statusline
 set laststatus=2
+
+" neomake onsave
+call neomake#configure#automake('w')
+" make neomake show errors in error list
+let g:neomake_open_list = 2
+
+let g:neomake_javascript_eslint_exe = 'yarn bin eslint'
+let g:neomake_vue_eslint_exe = system("yarn bin eslint | tr -d '\n'")
+
+"" Use Deoplete.
+"let g:deoplete#enable_at_startup = 1
 
 " YCM config
 let g:ycm_autoclose_preview_window_after_completion=1
@@ -81,12 +90,11 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_ruby_checkers = ['rubocop']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = 'npx eslint'
 let g:syntastic_typescript_checkers = ['tslint']
 let g:syntastic_typescript_tslint_exe = 'npx tslint'
-let g:syntastic_go_checkers = ['go']
-let g:syntastic_html_checkers = [] " disabling html checking because it cries too much in sfdx
+let g:syntastic_vue_checkers = ['eslint']
+let g:syntastic_vue_eslint_exe = 'yarn lint'
+let g:syntastic_vue_eslint_exec = 'ls'
 
 " ignore: line len, blank linke after class decl, assigned lambdas,
 " complex functions, arithmetic whitespace
@@ -121,11 +129,12 @@ set backspace=indent,eol,start
 set autoindent
 set nostartofline
 set ruler
+set laststatus=2
 set confirm
 set cmdheight=2
 set number
+set tenc=utf8
 set ttyfast
-set encoding=utf-8
 set notimeout ttimeout ttimeoutlen=200
 set whichwrap+=<,>,h,l,[,]
 set mouse=a "mostly for scrolling, text selection
@@ -148,7 +157,8 @@ set noswapfile
 
 "Indentation
 set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
-au FileType html,css,scss,scss.css,json,typescript,java,javascript,coffee,ruby,eruby,yaml setl sw=2 ts=2 sts=2
+au FileType java setl sw=8 ts=4 sts=8 expandtab!
+au FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml setl sw=2 ts=2 sts=2
 
 let g:html_indent_inctags = 'dd'
 
@@ -213,23 +223,13 @@ map k <Down>
 noremap h i
 
 "Folds
-set foldenable " enable folding
-set foldlevelstart=10
-set foldnestmax=10
-noremap <space> za
-set foldmethod=indent
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
 
+set fillchars="fold: "
+set foldmethod=indent
 autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
 set foldlevel=99
-
-""Trying to fix my fold problems
-"nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-"vnoremap <Space> zf
 "
-"set fillchars="fold: "
-"set foldmethod=indent
-"autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
-"autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,djangohtml normal zR
-""
-"" open all folds, then close the top level folds only
-"autocmd BufReadPost * :silent! %foldo! "| silent! %foldc
+" open all folds, then close the top level folds only
+autocmd BufReadPost * :silent! %foldo! "| silent! %foldc

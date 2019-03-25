@@ -1,19 +1,30 @@
-export PYTHON_CONFIGURE_OPTS="--enable-framework"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PYTHON_CONFIGURE_OPTS="--enable-framework"
+    export PATH="/Applications/Google Chrome.app/Contents/MacOS:$HOME/bin:$PATH"
+    export PATH="$PATH:/Library/Frameworks/Mono.framework/Versions/Current/Commands"
+    export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
+else
+    if command -v xmodmap 1>/dev/null 2>&1; then
+        xmodmap ~/.xmodmap
+    fi
+fi
 
-export PATH="/Applications/Google Chrome.app/Contents/MacOS:$HOME/bin:$PATH"
+# yarn section
+export PATH="$PATH:$(yarn global bin)"
 
-export PATH="$PATH:/Library/Frameworks/Mono.framework/Versions/Current/Commands"
-export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
-
+# golang path changes
 export GOPATH="$HOME/go"
-export PATH="$PATH:$GOPATH/bin"
+export PATH="/usr/local/go/bin:$PATH:$GOPATH/bin"
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-cloud-sdk/completion.zsh.inc'; fi
 
-eval "$(jenv init -)"
+if command -v jenv 1>/dev/null 2>&1; then
+  eval "$(jenv init -)"
+fi
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
