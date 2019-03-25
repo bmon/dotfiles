@@ -1,13 +1,16 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export PYTHON_CONFIGURE_OPTS="--enable-framework"
-    export PATH="/Applications/Google Chrome.app/Contents/MacOS:$HOME/bin:$PATH"
+    export PATH="/Applications/Google Chrome.app/Contents/MacOS:$PATH"
     export PATH="$PATH:/Library/Frameworks/Mono.framework/Versions/Current/Commands"
-    export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
+    #export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
 else
     if command -v xmodmap 1>/dev/null 2>&1; then
         xmodmap ~/.xmodmap
     fi
 fi
+
+# store some custom applications
+export PATH="$PATH:$HOME/bin"
 
 # yarn section
 export PATH="$PATH:$(yarn global bin)"

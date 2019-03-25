@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 IGNORE=('install.sh' 'README.md' 'register.sh' 'backup*')
+NO_DOT=('bin*')
 
 containsElement () {
   local e match="$1"
@@ -19,13 +20,19 @@ for FILENAME in $(find * -type f); do
         continue
     fi
 
+    # create and store the file path for the new link
     LINKNAME="$HOME/.$FILENAME"
+    if containsElement $FILENAME "${NO_DOT[@]}" ; then
+        # allow some files (or directories) to be stored without a dot
+        LINKNAME="$HOME/$FILENAME"
+    fi
+
     if [ $FILENAME -ef $LINKNAME ]; then
-        echo -e "\e[2m$FILENAME already linked to $LINKNAME\e[0m"
+        printf "$(tput setaf 10)$FILENAME already linked to $LINKNAME$(tput sgr0)\n"
         continue
     fi
 
-    echo  -e "\e[94mInstalling $FILENAME to $LINKNAME\e[0m"
+    printf "$(tput setaf 4)Installing $FILENAME to $LINKNAME$(tput sgr0)\n"
 
     if [ -e $LINKNAME ]; then
       # make a backup of the file(s), with a confirm override if necessary

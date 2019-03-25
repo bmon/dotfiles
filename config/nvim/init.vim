@@ -6,7 +6,6 @@ Plug 'Valloric/YouCompleteMe' "Autocompletion.
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
 
 Plug 'neomake/neomake'
-Plug 'jaawerth/nrun.vim'
 
 Plug 'tell-k/vim-autopep8'
 Plug 'dag/vim-fish' "fish syntax highlighting
@@ -53,9 +52,6 @@ let g:neomake_open_list = 2
 
 let g:neomake_javascript_eslint_exe = 'yarn bin eslint'
 let g:neomake_vue_eslint_exe = system("yarn bin eslint | tr -d '\n'")
-
-"" Use Deoplete.
-"let g:deoplete#enable_at_startup = 1
 
 " YCM config
 let g:ycm_autoclose_preview_window_after_completion=1
