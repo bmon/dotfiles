@@ -19,7 +19,7 @@ has_nitro: false
 default_prompt: "~"
 
 # the default 'playing ' status in discord
-default_activity: dline
+#default_activity: ' dline'
 
 # used for various things, your preference
 arrays_start_at_zero: false
@@ -57,7 +57,7 @@ show_separators: true
 # the denominator used to calculate the width of the "left bar"
 # NOTE: larger number here, the smaller the bar will be,
 #       (although there is still a minimum of 8 chars...)
-left_win_divider: 9
+left_win_divider: 8
 
 # same as the above setting but for the user bar
 user_win_divider: 6
@@ -70,13 +70,13 @@ truncate_channels: false
 number_channels: false
 
 # the amount of lines to scroll up/down on each trigger
-scroll_lines: 3
+scroll_lines: 10
 
 # Enables logging user messages to a file
 message_log: false
 
 # Enables timestamps
-timestamps_enabled: false
+timestamps_enabled: true
 
 # Timestamp format string
 # See https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior for

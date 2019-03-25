@@ -1,6 +1,6 @@
 export PYTHON_CONFIGURE_OPTS="--enable-framework"
 
-export PATH="/Applications/Google Chrome.app/Contents/MacOS:$PATH"
+export PATH="/Applications/Google Chrome.app/Contents/MacOS:$HOME/bin:$PATH"
 
 export PATH="$PATH:/Library/Frameworks/Mono.framework/Versions/Current/Commands"
 export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
@@ -15,6 +15,8 @@ if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-c
 
 eval "$(jenv init -)"
 
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
@@ -22,3 +24,5 @@ fi
 # fzf is a ctrl-r improvement https://github.com/junegunn/fzf
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PATH="$HOME/.cargo/bin:$PATH"

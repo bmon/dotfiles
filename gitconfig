@@ -48,6 +48,9 @@
     # once they are deleted upstream. Very handy!
     brdel = !git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
 
+    # pulp is a simple pull then push routine.
+    pulp = !git pull && git push
+
 # this will cause git to remember credentials for 43200 seconds (12 hours)
 [credential]
     helper = cache --timeout=43200
