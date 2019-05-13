@@ -1,6 +1,6 @@
 "Brendan Roy's .vimrc
 let g:uname = system("uname -s")
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'Valloric/YouCompleteMe' "Autocompletion.
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
@@ -8,13 +8,14 @@ Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fm
 Plug 'neomake/neomake'
 
 Plug 'tell-k/vim-autopep8'
-Plug 'dag/vim-fish' "fish syntax highlighting
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim' "typescript highlighting
 Plug 'tpope/vim-rails'
 Plug 'suan/vim-instant-markdown' "opens markdown files in a browser window
+
 Plug 'othree/html5.vim' " html5 completion and syntax and and formatting
-Plug 'sheerun/vim-polyglot' " catchall completion and syntax
+Plug 'ap/vim-css-color' " preview colors in source while editing
+Plug 'ejholmes/vim-forcedotcom' " highlighting for force.com classes, components etc...
 
 Plug 'vim-airline/vim-airline' "statusline prettifier
 Plug 'vim-airline/vim-airline-themes' "statusline prettifier
@@ -50,7 +51,7 @@ call neomake#configure#automake('w')
 " make neomake show errors in error list
 let g:neomake_open_list = 2
 
-let g:neomake_javascript_eslint_exe = 'yarn bin eslint'
+let g:neomake_javascript_eslint_exe = system("yarn bin eslint | tr -d '\n'")
 let g:neomake_vue_eslint_exe = system("yarn bin eslint | tr -d '\n'")
 
 " YCM config
@@ -66,6 +67,9 @@ let g:go_fmt_command = "goimports"
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
 let g:airline_powerline_fonts = 1
 let g:airline_theme='base16_embers'
 
@@ -111,10 +115,7 @@ nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
 
 "General settings
-filetype off
-set nocompatible
-filetype indent plugin on
-syntax on
+"syntax on
 set autowrite
 set hidden
 set showcmd
@@ -152,9 +153,9 @@ set nobackup
 set noswapfile
 
 "Indentation
-set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
-au FileType java setl sw=8 ts=4 sts=8 expandtab!
-au FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml setl sw=2 ts=2 sts=2
+set shiftwidth=4 tabstop=4 expandtab
+"au FileType java setl sw=8 ts=4 sts=8 expandtab!
+au FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex setl sw=2 ts=2
 
 let g:html_indent_inctags = 'dd'
 
@@ -224,7 +225,7 @@ vnoremap <Space> zf
 
 set fillchars="fold: "
 set foldmethod=indent
-autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
+"autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
 set foldlevel=99
 "
 " open all folds, then close the top level folds only
