@@ -1,5 +1,6 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
   alias ls="ls -G"
+  alias google-chrome-stable="Google\ Chrome"
 else
   alias ls="ls --color=auto"
 fi
