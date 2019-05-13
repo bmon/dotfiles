@@ -15,8 +15,6 @@ Plug 'suan/vim-instant-markdown' "opens markdown files in a browser window
 Plug 'othree/html5.vim' " html5 completion and syntax and and formatting
 Plug 'ap/vim-css-color' " preview colors in source while editing
 Plug 'ejholmes/vim-forcedotcom' " highlighting for force.com classes, components etc...
-Plug 'darfink/vim-plist' " macos plist editing
-"Plug 'sheerun/vim-polyglot' " catchall completion and syntax
 
 Plug 'vim-airline/vim-airline' "statusline prettifier
 Plug 'vim-airline/vim-airline-themes' "statusline prettifier
@@ -216,15 +214,15 @@ noremap h i
 set foldenable " enable folding
 set foldlevelstart=10
 set foldnestmax=10
-noremap <space> za
+"noremap <space> za
 set foldmethod=indent
 
 autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
 set foldlevel=99
 
 ""Trying to fix my fold problems
-"nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-"vnoremap <Space> zf
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
 "
 "set fillchars="fold: "
 "set foldmethod=indent

@@ -79,6 +79,7 @@
 # (different public key, different email, etc)
 [inclideIf "gitdir:~/git/servian/"]
     path = ~/git/servian/.gitconfig
+
 [color]
     status = auto
     diff = auto
