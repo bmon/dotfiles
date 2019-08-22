@@ -1,6 +1,6 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
   alias ls="ls -G"
-  alias google-chrome="Google\ Chrome"
+  alias chrome="Google\ Chrome"
 else
   alias ls="ls --color=auto"
 fi
@@ -8,11 +8,12 @@ fi
 alias ll="ls -l"
 alias la="ls -la"
 alias rg="rg --ignore-case --hidden"
+alias rp="rsync -ah --info=progress2"
 alias mkdirs="mkdir -p"
-alias pacman="sudo pacman"
 alias genpasswd="head -c 200 /dev/urandom | shasum | base64 | head -c 32 ; echo"
 alias ebprod="eb status app-production | awk '\$2 == \"Version:\" {print \$3}'"
 alias vim=nvim
+alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 function mitmproxy() {

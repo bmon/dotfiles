@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import sys
+import subprocess
+import os
+import collections
+
+def rg_search(query, location="."):
+    p = subprocess.Popen(
+        ["rg", "-c", query, location],
+        stdout=subprocess.PIPE,
+    )
+    return iter(p.stdout.readline, b'')
+
+def print_result(lines):
+    result_counts = collections.defaultdict(int)
+    prev_dirs = []
+    for line in sorted(lines):
+        decoded = line.decode('utf-8').strip()
+        filename, count = decoded.rsplit(':')
+        count = int(count)
+        parts = tuple(i+'/' for i in filename.split('/')[:-1]) + (filename.split('/')[-1],)
+
+        for d in range(len(parts)):
+            result_counts[parts[:d+1]] += count
+
+    for filename, count in result_counts.items():
+        space = '    ' * (len(filename) -1)
+        print(f'{count:>4} {space} {filename[-1]}')
+
+def main():
+    if len(sys.argv) == 1:
+        print("usage: tg PATTERN [PATH]")
+        sys.exit(1)
+
+    result = rg_search(*sys.argv[1:])
+    print_result(result)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print()
+        sys.exit(1)

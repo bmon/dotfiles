@@ -1,16 +1,21 @@
-"Brendan Roy's .vimrc
+".Brendan Roy's .vimrc
 let g:uname = system("uname -s")
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'Valloric/YouCompleteMe' "Autocompletion.
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
 
-Plug 'neomake/neomake'
+"Plug 'neomake/neomake'
+"
+"Plug 'Valloric/YouCompleteMe' "Autocompletion.
+"Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
 
 Plug 'tell-k/vim-autopep8'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim' "typescript highlighting
 Plug 'tpope/vim-rails'
+Plug 'othree/xml.vim' "xml / html editing
 Plug 'suan/vim-instant-markdown' "opens markdown files in a browser window
 
 Plug 'othree/html5.vim' " html5 completion and syntax and and formatting
@@ -47,21 +52,44 @@ colorscheme jellybeans
 set laststatus=2
 
 " neomake onsave
-call neomake#configure#automake('w')
+"call neomake#configure#automake('w')
 " make neomake show errors in error list
 let g:neomake_open_list = 2
 
 let g:neomake_javascript_eslint_exe = system("yarn bin eslint | tr -d '\n'")
 let g:neomake_vue_eslint_exe = system("yarn bin eslint | tr -d '\n'")
 
-" YCM config
-let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_python_binary_path = 'python'
-let g:ycm_keep_logfiles = 1
+"" YCM config
+"let g:ycm_autoclose_preview_window_after_completion=1
+"let g:ycm_python_binary_path = 'python'
+"let g:ycm_keep_logfiles = 1
 
+" Deoplete config
+"let g:deoplete#enable_at_startup = 1
+"call deoplete#custom#option('ignore_case', 1)
+"call deoplete#custom#option('omni_patterns', {
+"\ 'go': '[^. *\t]\.\w*',
+"\})
+"
+"let g:LanguageClient_autoStart = 1
+"let g:LanguageClient_serverCommands = {
+"  \ 'go': ['gopls'],
+"\}
+
+"function! s:check_back_space() abort "{{{
+"  let col = col('.') - 1
+"  return !col || getline('.')[col - 1]  =~ '\s'
+"endfunction"}}}
+"inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? "\<C-n>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ deoplete#manual_complete()
+"
 " vim-go
-let g:go_fmt_experimental = 1
+"let g:go_fmt_experimental = 1
 let g:go_fmt_command = "goimports"
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 " Let <Tab> also do completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -79,26 +107,26 @@ let g:gitgutter_realtime = 1
 let g:gitgutter_eager = 1
 set signcolumn=yes
 
-""Syntastic Config
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_ruby_checkers = ['rubocop']
-let g:syntastic_typescript_checkers = ['tslint']
-let g:syntastic_typescript_tslint_exe = 'npx tslint'
-let g:syntastic_vue_checkers = ['eslint']
-let g:syntastic_vue_eslint_exe = 'yarn lint'
-let g:syntastic_vue_eslint_exec = 'ls'
+"""Syntastic Config
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
+"
+"let g:syntastic_ruby_checkers = ['rubocop']
+"let g:syntastic_typescript_checkers = ['tslint']
+"let g:syntastic_typescript_tslint_exe = 'npx tslint'
+"let g:syntastic_vue_checkers = ['eslint']
+"let g:syntastic_vue_eslint_exe = 'yarn lint'
+"let g:syntastic_vue_eslint_exec = 'ls'
 
 " ignore: line len, blank linke after class decl, assigned lambdas,
 " complex functions, arithmetic whitespace
-let g:syntastic_python_flake8_args='--ignore=E501,E309,E731,C901,E226'
+"let g:syntastic_python_flake8_args='--ignore=E501,E309,E731,C901,E226'
 
 " flake8-vim
 let g:PyFlakeDisabledMessages = 'E501,E309,E731,C901'
@@ -108,9 +136,9 @@ nnoremap <c-p> :FZF<cr>
 
 let g:tmux_navigator_no_mappings = 1
 
-nnoremap <silent> <C-i> :TmuxNavigateUp<cr>
-nnoremap <silent> <C-j> :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-k> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
 
@@ -135,6 +163,7 @@ set ttyfast
 set notimeout ttimeout ttimeoutlen=200
 set whichwrap+=<,>,h,l,[,]
 set mouse=a "mostly for scrolling, text selection
+set pyxversion=3
 
 " for when you hold shift too long, and you're trying to type :wq
 cabbrev W w
@@ -214,10 +243,10 @@ map <C-w> :bd <bar> redraw! <CR>
 map <Leader>f :YcmCompleter GoTo <CR>
 
 " 60% keyboard not so crash hot so far
-map i <Up>
-map j <Left>
-map k <Down>
-noremap h i
+"map i <Up>
+"map j <Left>
+"map k <Down>
+"noremap h i
 
 "Folds
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>

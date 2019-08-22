@@ -1,23 +1,30 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export PYTHON_CONFIGURE_OPTS="--enable-framework"
-    export PATH="/Applications/Google Chrome.app/Contents/MacOS:$PATH"
+    export PATH="$PATH:/Applications/Google Chrome.app/Contents/MacOS"
     export PATH="$PATH:/Library/Frameworks/Mono.framework/Versions/Current/Commands"
+    export PATH="$PATH:/usr/local/opt/mysql-client/bin:"
     #export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
+
+    source $(brew --prefix php-version)/php-version.sh && php-version 5
 else
     if command -v xmodmap 1>/dev/null 2>&1; then
         xmodmap ~/.xmodmap
     fi
 fi
 
+export VISUAL=nvim
 # store some custom applications
 export PATH="$PATH:$HOME/bin"
 
-# yarn section
+# teh script
 export PATH="$PATH:$(yarn global bin)"
 
-# golang path changes
+# golang
 export GOPATH="$HOME/go"
-export PATH="/usr/local/go/bin:$PATH:$GOPATH/bin"
+export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
+
+# rust
+export PATH="$PATH:$HOME/.cargo/bin"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-sdk/path.zsh.inc'; fi
@@ -25,18 +32,14 @@ if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-s
 # The next line enables shell command completion for gcloud.
 if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-cloud-sdk/completion.zsh.inc'; fi
 
-if command -v jenv 1>/dev/null 2>&1; then
-  eval "$(jenv init -)"
-fi
-
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
+
 
 # fzf is a ctrl-r improvement https://github.com/junegunn/fzf
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-export PATH="$HOME/.cargo/bin:$PATH"
