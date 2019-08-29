@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# tg will call and parse the results of ripgrep to display a directory tree
+# with match counts for a search query.
+# Copyright Brendan Roy 2019
+
 import sys
 import subprocess
 import os
@@ -6,7 +11,7 @@ import collections
 
 def rg_search(query, location="."):
     p = subprocess.Popen(
-        ["rg", "-c", query, location],
+        ["rg", "-i", "-c", query, location],
         stdout=subprocess.PIPE,
     )
     return iter(p.stdout.readline, b'')
