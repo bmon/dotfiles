@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IGNORE=('install.sh' 'README.md' 'register.sh' 'backup*')
+IGNORE=('install.sh' 'README.md' 'register.sh' 'shell_up.sh' 'backup*')
 NO_DOT=('bin*')
 
 containsElement () {
