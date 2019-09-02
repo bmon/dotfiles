@@ -71,6 +71,9 @@
     insteadOf = gh:
 	insteadOf = https://github.com/
 
+[url "git@git.sr.ht:"]
+    insteadOf = sh:
+
 [url "git@source.servian.com:"]
     insteadOf = serv:
 
