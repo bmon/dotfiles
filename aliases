@@ -1,25 +1,40 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  alias ls="ls -G"
-  alias chrome="Google\ Chrome"
+    alias ls="ls -G"
+    alias chrome="Google\ Chrome"
 else
-  alias ls="ls --color=auto"
+    alias ls="ls --color=auto"
 fi
+
+# allows for `cd ....`
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
 
 alias ll="ls -l"
 alias la="ls -la"
-alias rg="rg --ignore-case --hidden"
+alias rg="rg --ignore-case --hidden --max-columns 1000 --max-columns-preview"
 alias rp="rsync -ah --info=progress2"
 alias mkdirs="mkdir -p"
+
 alias genpasswd="head -c 200 /dev/urandom | shasum | base64 | head -c 32 ; echo"
 alias ebprod="eb status app-production | awk '\$2 == \"Version:\" {print \$3}'"
+
 alias vim=nvim
 alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
-function mitmproxy() {
+
+mitmproxy() {
     networksetup -setwebproxystate wi-fi on
     networksetup -setsecurewebproxystate wi-fi on
     command mitmproxy
     networksetup -setwebproxystate wi-fi off
     networksetup -setsecurewebproxystate wi-fi off
+}
+
+prunehist() {
+    grep -v ".\{${1:-200}\}" $HISTFILE > ${HISTFILE}_new
+    echo $(grep -c ".\{${1:-200}\}" $HISTFILE) entries removed
+    mv ${HISTFILE}_new $HISTFILE
 }
