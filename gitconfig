@@ -72,7 +72,7 @@
 	insteadOf = https://github.com/
 
 [url "git@git.sr.ht:"]
-    insteadOf = sh:
+    insteadOf = srht:
 
 [url "git@source.servian.com:"]
     insteadOf = serv:
@@ -80,8 +80,8 @@
 # I have a second gitconfig located at ~/git/servian/.gitconfig
 # which defines additional settings, specific to servian repositories
 # (different public key, different email, etc)
-[inclideIf "gitdir:~/git/servian/"]
-    path = ~/git/servian/.gitconfig
+[includeIf "gitdir:~/go/src/github.com/AssemblyPayments/"]
+    path = ~/go/src/github.com/AssemblyPayments/.gitconfig
 
 [color]
     status = auto
