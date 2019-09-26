@@ -226,7 +226,7 @@ augroup END
 "system copy and paste binds
 " disabling these for now in favour of setting the default clipboard to the
 " system clipboard.
-set clipboard=unnamed,unnamedplus
+set clipboard=unnamed ",unnamedplus
 
 "map <C-y> "+y
 "map <C-p> "+p
