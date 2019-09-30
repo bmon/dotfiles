@@ -28,7 +28,10 @@ Plug 'kchmck/vim-coffee-script' "coffee highlighting and completion
 
 Plug 'easymotion/vim-easymotion' "jump around vim with leader leader
 Plug 'airblade/vim-gitgutter' "Shows file diff while editing
+
 Plug 'tpope/vim-fugitive' "Git plugin
+Plug 'tpope/vim-rhubarb'  "Github integration for fugitive
+
 Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
 Plug 'tpope/vim-abolish'  "case respectful search and replace via :%S
 Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
@@ -241,6 +244,7 @@ map <C-w> :bd <bar> redraw! <CR>
 
 " Map goto to something useful
 map <Leader>f :YcmCompleter GoTo <CR>
+map <Leader>d :call CocAction('jumpDefinition') <CR>
 
 " 60% keyboard not so crash hot so far
 "map i <Up>
