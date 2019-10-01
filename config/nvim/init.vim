@@ -2,29 +2,20 @@
 let g:uname = system("uname -s")
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
-
-"Plug 'neomake/neomake'
-"
-"Plug 'Valloric/YouCompleteMe' "Autocompletion.
-"Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+" coc is a language server client, configurable using :CocConfig
 Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
+" vim-autoformat will attempt to format source files using well known formatters, such as `clang-format`
+Plug 'bmon/vim-autoformat'
 
-Plug 'tell-k/vim-autopep8'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim' "typescript highlighting
-Plug 'tpope/vim-rails'
-Plug 'othree/xml.vim' "xml / html editing
 Plug 'suan/vim-instant-markdown' "opens markdown files in a browser window
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
 
-Plug 'othree/html5.vim' " html5 completion and syntax and and formatting
-Plug 'ap/vim-css-color' " preview colors in source while editing
-Plug 'ejholmes/vim-forcedotcom' " highlighting for force.com classes, components etc...
+Plug 'ap/vim-css-color' "preview colors in source while editing
 
 Plug 'vim-airline/vim-airline' "statusline prettifier
 Plug 'vim-airline/vim-airline-themes' "statusline prettifier
-Plug 'kchmck/vim-coffee-script' "coffee highlighting and completion
 
 Plug 'easymotion/vim-easymotion' "jump around vim with leader leader
 Plug 'airblade/vim-gitgutter' "Shows file diff while editing
@@ -35,11 +26,11 @@ Plug 'tpope/vim-rhubarb'  "Github integration for fugitive
 Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
 Plug 'tpope/vim-abolish'  "case respectful search and replace via :%S
 Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
-"Plug 'mileszs/ack.vim' "use ack in vim
-Plug 'jremmen/vim-ripgrep'
-" Plug 'ctrlpvim/ctrlp.vim' "ctrl p fuzzy search - disabled in favor of fzf+rg
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+Plug 'jremmen/vim-ripgrep' "provides :Rg for calling ripgrep within vim
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "fantastic fuzzy filename completion
 Plug 'junegunn/fzf.vim' "fzf extensions for vim
+
 Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree'
 
@@ -62,32 +53,7 @@ let g:neomake_open_list = 2
 let g:neomake_javascript_eslint_exe = system("yarn bin eslint | tr -d '\n'")
 let g:neomake_vue_eslint_exe = system("yarn bin eslint | tr -d '\n'")
 
-"" YCM config
-"let g:ycm_autoclose_preview_window_after_completion=1
-"let g:ycm_python_binary_path = 'python'
-"let g:ycm_keep_logfiles = 1
 
-" Deoplete config
-"let g:deoplete#enable_at_startup = 1
-"call deoplete#custom#option('ignore_case', 1)
-"call deoplete#custom#option('omni_patterns', {
-"\ 'go': '[^. *\t]\.\w*',
-"\})
-"
-"let g:LanguageClient_autoStart = 1
-"let g:LanguageClient_serverCommands = {
-"  \ 'go': ['gopls'],
-"\}
-
-"function! s:check_back_space() abort "{{{
-"  let col = col('.') - 1
-"  return !col || getline('.')[col - 1]  =~ '\s'
-"endfunction"}}}
-"inoremap <silent><expr> <TAB>
-"      \ pumvisible() ? "\<C-n>" :
-"      \ <SID>check_back_space() ? "\<TAB>" :
-"      \ deoplete#manual_complete()
-"
 " vim-go
 "let g:go_fmt_experimental = 1
 let g:go_fmt_command = "goimports"
@@ -109,27 +75,6 @@ set updatetime=250
 let g:gitgutter_realtime = 1
 let g:gitgutter_eager = 1
 set signcolumn=yes
-
-"""Syntastic Config
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-"
-"let g:syntastic_ruby_checkers = ['rubocop']
-"let g:syntastic_typescript_checkers = ['tslint']
-"let g:syntastic_typescript_tslint_exe = 'npx tslint'
-"let g:syntastic_vue_checkers = ['eslint']
-"let g:syntastic_vue_eslint_exe = 'yarn lint'
-"let g:syntastic_vue_eslint_exec = 'ls'
-
-" ignore: line len, blank linke after class decl, assigned lambdas,
-" complex functions, arithmetic whitespace
-"let g:syntastic_python_flake8_args='--ignore=E501,E309,E731,C901,E226'
 
 " flake8-vim
 let g:PyFlakeDisabledMessages = 'E501,E309,E731,C901'
@@ -199,18 +144,14 @@ let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
 "exists.
 set switchbuf=usetab
 
-"Remove trailing whitespace on save
-autocmd BufWritePre * :%s/\s\+$//e
+" call :Autoformat on save. This will try to call a formatter for the
+" current file, but if it doesn't exist will fallback to the options
+" configured below.
+au BufWrite * :Autoformat
 
-"let g:netrw_banner = 0
-"let g:netrw_liststyle = 3
-"let g:netrw_browse_split = 4
-"let g:netrw_altv = 1
-"let g:netrw_winsize = 25
-"augroup ProjectDrawer
-"  autocmd!
-"  autocmd VimEnter * :Vexplore
-"augroup END
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 1
 
 "Create required parent directores on buffer write
 function! s:MkNonExDir(file, buf)
@@ -226,13 +167,10 @@ augroup BWCCreateDir
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
 
-"system copy and paste binds
-" disabling these for now in favour of setting the default clipboard to the
-" system clipboard.
+" copy and paste into system clipboard.
 set clipboard=unnamed ",unnamedplus
 
-"map <C-y> "+y
-"map <C-p> "+p
+" leader p to replace the entire buffer
 map <Leader>p gg"_dGP
 
 "Swap Buffers fastlike
@@ -243,14 +181,7 @@ nnoremap <silent> <C-u> :bprevious <CR>
 map <C-w> :bd <bar> redraw! <CR>
 
 " Map goto to something useful
-map <Leader>f :YcmCompleter GoTo <CR>
 map <Leader>d :call CocAction('jumpDefinition') <CR>
-
-" 60% keyboard not so crash hot so far
-"map i <Up>
-"map j <Left>
-"map k <Down>
-"noremap h i
 
 "Folds
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
@@ -258,8 +189,7 @@ vnoremap <Space> zf
 
 set fillchars="fold: "
 set foldmethod=indent
-"autocmd Syntax c,cpp,vim,xml,html,xhtml,djangohtml setlocal foldmethod=syntax
 set foldlevel=99
-"
+
 " open all folds, then close the top level folds only
 autocmd BufReadPost * :silent! %foldo! "| silent! %foldc

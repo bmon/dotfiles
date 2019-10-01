@@ -54,6 +54,9 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history # share command history data
 
+fpath=(~/.zsh $fpath)
+
+autoload -Uz compinit && compinit
 
 # launch tmux if not already running.
 if [[ -z "$TMUX" ]]; then

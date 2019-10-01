@@ -1,6 +1,6 @@
 #!/bin/bash
 DEPENDANCIES=('bash' 'zsh' 'tmux' 'nvim' 'rg')
-FONT_PREF="Hasklug"
+FONT_PREF="Hasklig"
 
 echo_cmd() {
     tput setaf 4

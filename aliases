@@ -27,8 +27,6 @@ alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
-export AP=/home/broy/go/src/github.com/AssemblyPayments
-
 mitmproxy() {
     networksetup -setwebproxystate wi-fi on
     networksetup -setsecurewebproxystate wi-fi on
@@ -43,7 +41,4 @@ prunehist() {
     mv ${HISTFILE}_new $HISTFILE
 }
 
-mspup() {
-    cd $HOME/go/src/github.com/AssemblyPayments/computils/devutils/local-runtime/msp
-    ./run.sh "$@"
-}
+export AP=$HOME/go/src/github.com/AssemblyPayments
