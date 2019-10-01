@@ -1,3 +1,12 @@
+# Brendan's zshrc.
+# This file should contain zsh specific configuration, and should also source any generic
+# configuration files such as ~/.aliases. Lastly it will connect to an existing tmux session,
+# or start the server if there is none.
+#
+# One of my primary aims is to keep this file as fast as possible, to reduce startup time when
+# creating tmux panes. This is the reason I don't use oh-my-zsh, for example. I've actually
+# found switching away from oh-my-zsh to be pretty simple.
+
 THEME="p10k"
 
 case "$THEME" in

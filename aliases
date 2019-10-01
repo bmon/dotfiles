@@ -41,4 +41,5 @@ prunehist() {
     mv ${HISTFILE}_new $HISTFILE
 }
 
+export DOTS=$HOME/git/dotfiles
 export AP=$HOME/go/src/github.com/AssemblyPayments
