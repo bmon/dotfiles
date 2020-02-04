@@ -199,7 +199,9 @@ nnoremap <silent> <C-o> :bnext <CR>
 nnoremap <silent> <C-u> :bprevious <CR>
 
 "quicky close buffers
-map <C-w> :bd <bar> redraw! <CR>
+map <C-w> :bd <CR>
+"workaround for tabline refresh issue
+autocmd BufDelete * call airline#extensions#tabline#buflist#invalidate()
 
 " Map goto to something useful
 map <Leader>f :YcmCompleter GoTo <CR>

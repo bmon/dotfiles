@@ -27,18 +27,46 @@ alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
-mitmproxy() {
-    networksetup -setwebproxystate wi-fi on
-    networksetup -setsecurewebproxystate wi-fi on
-    command mitmproxy
-    networksetup -setwebproxystate wi-fi off
-    networksetup -setsecurewebproxystate wi-fi off
-}
+//mitmproxy() {
+//    networksetup -setwebproxystate wi-fi on
+//    networksetup -setsecurewebproxystate wi-fi on
+//    command mitmproxy
+//    networksetup -setwebproxystate wi-fi off
+//    networksetup -setsecurewebproxystate wi-fi off
+//}
 
 prunehist() {
     grep -v ".\{${1:-200}\}" $HISTFILE > ${HISTFILE}_new
     echo $(grep -c ".\{${1:-200}\}" $HISTFILE) entries removed
     mv ${HISTFILE}_new $HISTFILE
+}
+
+ap-start() {
+    setopt local_options BASH_REMATCH
+    COMPUTILS_MSP=$AP/computils/devutils/local-runtime/msp
+
+    SVC=$1
+    DO_MAKE=false
+    if [ -z "$SVC" ]; then
+        PWD_BASENAME=$(basename "$PWD")
+        regex="^msp\-(.+)$"
+        if [[ $PWD_BASENAME =~ $regex ]] ; then
+            SVC="${BASH_REMATCH[2]}"
+            DO_MAKE=true
+        else
+            echo "usage: ap-start <service-name>"
+            echo "alternatively, start from within msp- repository"
+            return 1
+        fi
+    fi
+
+    if [ "$SVC" = "rtm-dashboard" ] ; then
+        SVC="support-dashboard"
+    fi
+
+    echo "readying environment for $SVC..."
+    docker-compose -f $COMPUTILS_MSP/docker-compose.yml stop $SVC
+    $(cd $COMPUTILS_MSP && ./run.sh $SVC -e $SVC)
 }
 
 export DOTS=$HOME/git/dotfiles

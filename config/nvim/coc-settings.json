@@ -2,8 +2,8 @@
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": ["go", "json"],
 
-  // jump to definition/impl in new or existing tab
-  "coc.preferences.jumpCommand": "drop",
+  // this doesn't seem to work.
+  "suggest.fixInsertedWord": false,
 
   "languageserver": {
     "golang": {

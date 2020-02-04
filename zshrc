@@ -37,6 +37,8 @@ case "$THEME" in
         ;;
 esac
 
+bindkey -e # don't use vi mode terminal
+
 # zsh-autosuggestions (press ctrl-space to load)
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^ ' autosuggest-execute #ctrl-space to execute suggestion
@@ -62,6 +64,8 @@ setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
 setopt share_history # share command history data
+setopt interactivecomments # allow comments on shell
+
 
 fpath=(~/.zsh $fpath)
 
