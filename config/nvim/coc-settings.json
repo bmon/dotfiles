@@ -9,7 +9,10 @@
     "golang": {
       "command": "gopls",
       "rootPatterns": ["go.mod"],
-      "filetypes": ["go"]
+      "filetypes": ["go"],
+      "env": {
+        "GOFLAGS": "-tags=endtoend"
+      }
     }
   }
 }

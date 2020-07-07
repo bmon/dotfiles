@@ -47,7 +47,9 @@ ap-start() {
 
     SVC=$1
     DO_MAKE=false
-    if [ -z "$SVC" ]; then
+
+
+    if [ -z "$SVC" ] || [ "$SVC" = "-e" ]; then
         PWD_BASENAME=$(basename "$PWD")
         regex="^msp\-(.+)$"
         if [[ $PWD_BASENAME =~ $regex ]] ; then
@@ -64,9 +66,20 @@ ap-start() {
         SVC="support-dashboard"
     fi
 
+    EXCLUDE=$SVC
+
+    if [ "$0" = "-e" ]; then
+        EXCLUDE="$EXCLUDE,$1"
+    elif [ "$1" = "-e" ]; then
+        EXCLUDE="$EXCLUDE,$2"
+    fi
+
     echo "readying environment for $SVC..."
+    echo "docker-compose -f $COMPUTILS_MSP/docker-compose.yml stop $SVC"
     docker-compose -f $COMPUTILS_MSP/docker-compose.yml stop $SVC
-    $(cd $COMPUTILS_MSP && ./run.sh $SVC -e $SVC)
+
+    echo "cd $COMPUTILS_MSP && ./run.sh $SVC -e $EXCLUDE"
+    $(cd $COMPUTILS_MSP && ./run.sh $SVC -e $EXCLUDE)
 }
 
 export DOTS=$HOME/git/dotfiles

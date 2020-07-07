@@ -120,8 +120,12 @@ set tenc=utf8
 set ttyfast
 set notimeout ttimeout ttimeoutlen=200
 set whichwrap+=<,>,h,l,[,]
-set mouse=a "mostly for scrolling, text selection
+"set mouse=a "mostly for scrolling, text selection
 set pyxversion=3
+
+" Use very magic matching by default on search and replace
+nnoremap / /\v
+cnoremap %s/ %s/\v
 
 " for when you hold shift too long, and you're trying to type :wq
 cabbrev W w
@@ -141,9 +145,9 @@ set noswapfile
 
 "Indentation
 set shiftwidth=4 tabstop=4 expandtab
-"au FileType java setl sw=8 ts=4 sts=8 expandtab!
 autocmd FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex setl sw=2 ts=2
 autocmd FileType json syntax match Comment +\/\/.\+$+
+autocmd FileType go setl noexpandtab
 
 " Gray column at 80 chars
 hi ColorColumn guibg=#242424 ctermbg=234
@@ -186,6 +190,9 @@ map <Leader>p gg"_dGP
 "Swap Buffers fastlike
 nnoremap <silent> <C-o> :bnext <CR>
 nnoremap <silent> <C-u> :bprevious <CR>
+
+"Fix syntax highliging errors when switching buffers
+autocmd BufEnter * :syntax sync fromstart
 
 "quicky close buffers
 map <C-w> :bd <CR>
