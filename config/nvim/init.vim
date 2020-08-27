@@ -1,164 +1,89 @@
 ".Brendan Roy's .vimrc
-let g:uname = system("uname -s")
 call plug#begin('~/.local/share/nvim/plugged')
+" Code editing
+Plug 'neovim/nvim-lsp'
+"Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
-" coc is a language server client, configurable using :CocConfig
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-" vim-autoformat will attempt to format source files using well known formatters, such as `clang-format`
-Plug 'chiel92/vim-autoformat'
-
-Plug 'suan/vim-instant-markdown' "opens markdown files in a browser window
-"Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' } "Golang autocompetion, go fmt on write, etc
-
-Plug 'ap/vim-css-color' "preview colors in source while editing
-
-Plug 'vim-airline/vim-airline' "statusline prettifier
-Plug 'vim-airline/vim-airline-themes' "statusline prettifier
-
-Plug 'easymotion/vim-easymotion' "jump around vim with leader leader
-Plug 'airblade/vim-gitgutter' "Shows file diff while editing
-
-Plug 'tpope/vim-fugitive' "Git plugin
-Plug 'tpope/vim-rhubarb'  "Github integration for fugitive
-
-Plug 'aymericbeaumet/vim-symlink' "Edit symlink targets directly
-Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
-Plug 'tpope/vim-abolish'  "case respectful search and replace via :%S
-Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
-
-Plug 'jremmen/vim-ripgrep' "provides :Rg for calling ripgrep within vim
+" Vim Functionality
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "fantastic fuzzy filename completion
 Plug 'junegunn/fzf.vim' "fzf extensions for vim
+Plug 'christoomey/vim-tmux-navigator' "Navigagte vim splits like tmux
+Plug 'chiel92/vim-autoformat' "Autoformat some files like .proto with clang-format
+Plug 'tpope/vim-fugitive' "Git plugin
+Plug 'tpope/vim-rhubarb'  "Github integration for fugitive
+Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
+Plug 'tpope/vim-abolish'  "case respectful search and replace via :%S
+Plug 'ncm2/float-preview.nvim' "Floating completion pane
 
+" Visuals
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'airblade/vim-gitgutter'
 Plug 'flazz/vim-colorschemes'
 call plug#end()
 
-filetype plugin indent on
+""" nvim-lsp
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> <c-]>    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
-"Beautiful Syntax highlighting
-colorscheme jellybeans
+lua << EOF
+local nvim_lsp = require'nvim_lsp'
 
-" Always show statusline
-set laststatus=2
+nvim_lsp.gopls.setup{
+    cmd = { "gopls", "-remote=auto" },
+    settings = {
+        buildFlags = { "-tags=endtoend" }
+    }
+}
+nvim_lsp.vimls.setup{}
+nvim_lsp.clangd.setup{}
 
-"" vim-go
-""let g:go_fmt_experimental = 1
-"let g:go_fmt_command = "goimports"
-"let g:go_def_mode='gopls'
-"let g:go_info_mode='gopls'
-"" vim-go bindings clash with others, so I disable them all and re-enable those I care for
-"let g:go_def_mapping_enabled=0
-nmap gd <Plug>(coc-definition)
-nmap gy <Plug>(coc-type-definition)
-nmap gi <Plug>(coc-implementation)
-nmap gr <Plug>(coc-references)
 
-" Let <Tab> be used to browse completion menu
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" Pressing enter with completion menu visible will accept the current
-" completion. I have an issue/bug with coc that will delete a word after
-" the completion when using C-y (the usual map to accept a compltion).
-" Instead I have mapped it to ESC which will close the completion menu.
-" Thus we rely on C-n and C-p to populate a completion as it is selected.
-"inoremap <expr> <CR>   pumvisible() ? "\<C-y>" : "\<CR>"
-"inoremap <expr> <CR>    pumvisible() ? "\<ESC>" : "\<CR>"
-inoremap <expr> <CR> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-"inoremap <expr> <CR> json_encode(complete_info())
-"
-" For some reason using <Up> and <Down> is not the same as <C-n> and <C-p>
-" when browsing completions. Maybe to do with coc?
-inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
+-- https://github.com/neovim/nvim-lsp/issues/115
+function go_organize_imports_sync(timeout_ms)
+  local context = { source = { organizeImports = true } }
+  vim.validate { context = { context, 't', true } }
+  local params = vim.lsp.util.make_range_params()
+  params.context = context
 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
-let g:airline_powerline_fonts = 1
-let g:airline_theme='base16_embers'
+  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+  if (result and result[1].result and result[1].result[1].edit) then
+    vim.lsp.util.apply_workspace_edit(result[1].result[1].edit)
+  end
 
-"Additional config for gitgutter
-set updatetime=250
-let g:gitgutter_realtime = 1
-let g:gitgutter_eager = 1
-set signcolumn=yes
+  result = vim.lsp.buf_request_sync(0, "textDocument/formatting", params, timeout_ms)
+  if (result and result[1].result) then
+    vim.lsp.util.apply_text_edits(result[1].result)
+  end
+end
 
-" flake8-vim
-let g:PyFlakeDisabledMessages = 'E501,E309,E731,C901'
+--vim.api.nvim_command("au BufWritePre *.go lua go_organize_imports_sync(1000)")
+EOF
 
-" fzf
-nnoremap <C-p> :FZF<cr>
+set omnifunc=v:lua.vim.lsp.omnifunc
 
+"""" vim-go
+"let g:go_fmt_command = "goimports"   " Run goimports on save as well
+"let g:go_def_mapping_enabled=0       " Don't bind gd, gr, etc. Leave it to the LSP.
+"let g:go_code_completion_enabled = 1 " Let the LSP do code completion instead
+
+""" fzf
+nnoremap <C-p> :Files<cr>
+
+""" tmux-navigator
 let g:tmux_navigator_no_mappings = 1
-
 nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
 
-"General settings
-"syntax on
-set autowrite
-set hidden
-set showcmd
-set hlsearch
-set ignorecase
-set smartcase
-set backspace=indent,eol,start
-set autoindent
-set nostartofline
-set ruler
-set laststatus=2
-set confirm
-set cmdheight=2
-set number
-set tenc=utf8
-set ttyfast
-set notimeout ttimeout ttimeoutlen=200
-set whichwrap+=<,>,h,l,[,]
-"set mouse=a "mostly for scrolling, text selection
-set pyxversion=3
-
-" Use very magic matching by default on search and replace
-nnoremap / /\v
-cnoremap %s/ %s/\v
-
-" for when you hold shift too long, and you're trying to type :wq
-cabbrev W w
-cabbrev Q q
-cabbrev Wq wq
-
-"Tab completion on commands
-set wildmode=longest,full
-set wildmenu
-
-" tell vim where to put its backup and swap files
-"set backupdir=~/.vim_backups
-"set dir=~/.vim_backups
-" or just not to back up at all
-set nobackup
-set noswapfile
-
-"Indentation
-set shiftwidth=4 tabstop=4 expandtab
-autocmd FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex setl sw=2 ts=2
-autocmd FileType json syntax match Comment +\/\/.\+$+
-autocmd FileType go setl noexpandtab
-
-" Gray column at 80 chars
-hi ColorColumn guibg=#242424 ctermbg=234
-let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
-
-"when using :sb[next|previous], don't make a new window if one already exists.
-set switchbuf=usetab
-
-" call :Autoformat on save. This will try to call a formatter for the
-" current file, but if it doesn't exist will fallback to the options
-" configured below.
+""" vim-autoformat
 au BufWrite * :Autoformat
 
 let g:autoformat_autoindent = 0
@@ -167,41 +92,54 @@ let g:autoformat_remove_trailing_spaces = 1
 
 let g:formatdef_gofmt_1 = '"gofmt | goimports"'
 
-"Create required parent directores on buffer write
-function! s:MkNonExDir(file, buf)
-    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
-        let dir=fnamemodify(a:file, ':h')
-        if !isdirectory(dir)
-            call mkdir(dir, 'p')
-        endif
+""" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='base16_embers'
+let g:airline_section_z='%p%%' " Don't bother with cols, max lineno, etc
+let g:airline#extensions#whitespace#checks = [] " these checks aren't useful for me
+
+""" gitgutter
+set updatetime=250
+let g:gitgutter_realtime = 1
+let g:gitgutter_eager = 1
+
+""" Omnicompletion on typeing
+function! OpenCompletion()
+    if &ft =~ 'sql'
+        return
+    endif
+
+    if !pumvisible() && ((v:char >= 'a' && v:char <= 'z') || (v:char >= 'A' && v:char <= 'Z'))
+        call feedkeys("\<C-x>\<C-o>", "n")
     endif
 endfunction
-augroup BWCCreateDir
-    autocmd!
-    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
-augroup END
 
-" copy and paste into system clipboard.
-set clipboard=unnamedplus
+autocmd InsertCharPre * call OpenCompletion()
+set completeopt+=menuone,noinsert,noselect
+set completeopt-=preview
 
-" leader p to replace the entire buffer
-map <Leader>p gg"_dGP
-
-"Swap Buffers fastlike
+""" Switch buffers with CTRL U or CTRL O
 nnoremap <silent> <C-o> :bnext <CR>
 nnoremap <silent> <C-u> :bprevious <CR>
-
-"Fix syntax highliging errors when switching buffers
-autocmd BufEnter * :syntax sync fromstart
-
-"quicky close buffers
-map <C-w> :bd <CR>
+nnoremap <C-w> :bd <CR>
 autocmd BufDelete * call airline#extensions#tabline#buflist#invalidate()
+autocmd BufEnter * :syntax sync fromstart " Fix syntax highliging errors when switching buffers
 
-" Map goto to something useful
-map <Leader>d :call CocAction('jumpDefinition') <CR>
 
-"Folds
+""" Indendation and filetype maps
+set shiftwidth=4 tabstop=4 expandtab
+autocmd FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex setl sw=2 ts=2
+autocmd FileType json syntax match Comment +\/\/.\+$+
+autocmd FileType go setl noexpandtab
+
+" Gray column at 80, 100 and 120 chars
+hi ColorColumn guibg=#242424 ctermbg=234
+let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
+
+
+""" Code folding
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
 
@@ -209,5 +147,35 @@ set fillchars="fold: "
 set foldmethod=indent
 set foldlevel=99
 
-" open all folds, then close the top level folds only
-autocmd BufReadPost * :silent! %foldo! "| silent! %foldc
+
+
+""" General settings
+set hidden     " Never unload buffers, instead hide them. This allows switching buffers with unsaved changes
+set hlsearch   " Highlight previous search matches
+set ignorecase " Default ignore case when searching
+set smartcase  " Override ignorecase if a search contains any uppercase characters
+set confirm    " Instead of failing to quit when unsaved, ask if you want to save
+set number     " Add line numbers
+set notimeout ttimeout ttimeoutlen=200 " Wait 200ms for key combos
+set whichwrap+=<,>,[,] " which buttons can wrap lines
+set nobackup           " no backup files or folder
+set noswapfile         " no swap files
+set wildmode=longest,full "Tab completion on commands
+set wildmenu              " ^
+
+" Use very magic matching by default on search and replace
+nnoremap / /\v
+cnoremap %s/ %s/\v
+
+" text deleted with `x` goes to the black hole register (not yanked)
+nnoremap x "_x
+
+" for when you hold shift too long, and you're trying to type :wq
+cabbrev W w
+cabbrev Q q
+cabbrev Wq wq
+
+" open this config file
+cabbrev Config e ~/.config/nvim/init.vim
+
+colorscheme jellybeans

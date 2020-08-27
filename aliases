@@ -22,24 +22,35 @@ alias ebprod="eb status app-production | awk '\$2 == \"Version:\" {print \$3}'"
 
 alias pacman="sudo pacman"
 
+alias nvim=/usr/local/bin/nvim # installed from source
 alias vim=nvim
 alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
-//mitmproxy() {
-//    networksetup -setwebproxystate wi-fi on
-//    networksetup -setsecurewebproxystate wi-fi on
-//    command mitmproxy
-//    networksetup -setwebproxystate wi-fi off
-//    networksetup -setsecurewebproxystate wi-fi off
-//}
+alias dockerbuildscratch='mkdir -p build && touch build/{version,project_deps}.json && ECR_REPO=567505611260.dkr.ecr.ap-southeast-2.amazonaws.com DOCKERFILE=Dockerfile-scratch docker-compose build'
+
+# mitmproxy() {
+#     networksetup -setwebproxystate wi-fi on
+#     networksetup -setsecurewebproxystate wi-fi on
+#     command mitmproxy
+#     networksetup -setwebproxystate wi-fi off
+#     networksetup -setsecurewebproxystate wi-fi off
+# }
 
 prunehist() {
     grep -v ".\{${1:-200}\}" $HISTFILE > ${HISTFILE}_new
     echo $(grep -c ".\{${1:-200}\}" $HISTFILE) entries removed
     mv ${HISTFILE}_new $HISTFILE
 }
+
+# AWS profile switcher
+# Type 'aws-profile' and tab through profiles defined in your ~/.aws/config.
+# Once selected, it exports it as AWS_PROFILE env var that most AWS-aware tools respect.
+if [ -f ~/.aws/config ]; then
+    aws-profile() { export AWS_PROFILE=$1; }
+    complete -W "`sed -nE 's:^\[profile (.+)\]$:\1:p' ~/.aws/config | tr '\n' ' '`" aws-profile
+fi
 
 ap-start() {
     setopt local_options BASH_REMATCH
@@ -83,4 +94,4 @@ ap-start() {
 }
 
 export DOTS=$HOME/git/dotfiles
-export AP=$HOME/go/src/github.com/AssemblyPayments
+export AP=$HOME/go/src/github.com/mx51

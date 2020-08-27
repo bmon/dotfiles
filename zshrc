@@ -7,19 +7,16 @@
 # creating tmux panes. This is the reason I don't use oh-my-zsh, for example. I've actually
 # found switching away from oh-my-zsh to be pretty simple.
 
+
 THEME="p10k"
 
 case "$THEME" in
     # powerlevel10k is quite a neat and powerful terminal theme
     # however it adds about 180ms of latency to a zsh startup
     p10k)
+        # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
         source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
-        POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
-        POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
-        POWERLEVEL9K_STATUS_OK=false
-        POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-        POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-        POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="$ "
+        source ~/.p10k.zsh
         ;;
     # agnoster is a much more basic version (in fact the inspiration)
     # for powerlevel9k/10k and is way faster to load.

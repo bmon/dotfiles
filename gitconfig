@@ -34,6 +34,9 @@
 #
 # I really like the output format of `branch -vv` so I've aliased it to `br`.
 [alias]
+    dash = diff --cached
+
+    # nicer git log
     lg = log --color --graph --pretty=format:'%C(magenta)%h%Creset %C(bold blue)<%an>%Creset %C(dim red)%cr%Creset - %s%C(yellow)%d%Creset' --abbrev-commit
     changelog = log --color --graph --pretty=format:'%D %s' --abbrev-commit
     br = branch -vv
