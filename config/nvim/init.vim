@@ -2,6 +2,7 @@
 call plug#begin('~/.local/share/nvim/plugged')
 " Code editing
 Plug 'neovim/nvim-lsp'
+Plug 'nvim-lua/diagnostic-nvim' " Better error highlighting for nvim lsp
 "Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
 " Vim Functionality
@@ -19,12 +20,18 @@ Plug 'ncm2/float-preview.nvim' "Floating completion pane
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-Plug 'flazz/vim-colorschemes'
+Plug 'Iron-E/nvim-highlite'
+"Plug 'flazz/vim-colorschemes'
+
 call plug#end()
+
+""" Initialise colorscheme early to aid nvim-lsp colouring
+set termguicolors
+colorscheme highlite
 
 """ nvim-lsp
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <c-]>    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
@@ -32,45 +39,56 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 lua << EOF
-local nvim_lsp = require'nvim_lsp'
+	local nvim_lsp = require'nvim_lsp'
 
-nvim_lsp.gopls.setup{
-    cmd = { "gopls", "-remote=auto" },
-    settings = {
-        buildFlags = { "-tags=endtoend" }
-    }
-}
-nvim_lsp.vimls.setup{}
-nvim_lsp.clangd.setup{}
+	nvim_lsp.gopls.setup{
+	    settings = {
+	        gopls = {
+	            buildFlags = {"-tags=endtoend"},
+	            gofumpt = true,
+                usePlaceholders = true,
+                allExperiments = true,
+				["local"] = "github.com/mx51",
+                staticcheck = true,
+	        }
+	    },
+	    on_attach=require'diagnostic'.on_attach
+	}
+	nvim_lsp.vimls.setup{}
+	nvim_lsp.clangd.setup{}
 
+	function goimports(timeoutms)
+	  local context = { source = { organizeImports = true } }
+	  vim.validate { context = { context, "t", true } }
 
--- https://github.com/neovim/nvim-lsp/issues/115
-function go_organize_imports_sync(timeout_ms)
-  local context = { source = { organizeImports = true } }
-  vim.validate { context = { context, 't', true } }
-  local params = vim.lsp.util.make_range_params()
-  params.context = context
+	  local params = vim.lsp.util.make_range_params()
+	  params.context = context
 
-  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-  if (result and result[1].result and result[1].result[1].edit) then
-    vim.lsp.util.apply_workspace_edit(result[1].result[1].edit)
-  end
+	  local method = "textDocument/codeAction"
+	  local resp = vim.lsp.buf_request_sync(0, method, params, timeoutms)
+	  if resp and resp[1] then
+	    local result = resp[1].result
+	    if result and result[1] then
+	      local edit = result[1].edit
+	      vim.lsp.util.apply_workspace_edit(edit)
+	    end
+	  end
 
-  result = vim.lsp.buf_request_sync(0, "textDocument/formatting", params, timeout_ms)
-  if (result and result[1].result) then
-    vim.lsp.util.apply_text_edits(result[1].result)
-  end
-end
-
---vim.api.nvim_command("au BufWritePre *.go lua go_organize_imports_sync(1000)")
+	  vim.lsp.buf.formatting()
+	end
 EOF
+
+autocmd BufWritePre *.go lua goimports(1000)
 
 set omnifunc=v:lua.vim.lsp.omnifunc
 
-"""" vim-go
-"let g:go_fmt_command = "goimports"   " Run goimports on save as well
-"let g:go_def_mapping_enabled=0       " Don't bind gd, gr, etc. Leave it to the LSP.
-"let g:go_code_completion_enabled = 1 " Let the LSP do code completion instead
+""" nvim-diagnostic for better inline lsp errors
+
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_virtual_text_prefix = ''
+
+nnoremap <leader>n :NextDiagnosticCycle<cr>
+nnoremap <leader>N :PrevDiagnosticCycle<cr>
 
 """ fzf
 nnoremap <C-p> :Files<cr>
@@ -84,13 +102,12 @@ nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <C-\> :TmuxNavigatePrevious<cr>
 
 """ vim-autoformat
-au BufWrite * :Autoformat
+let ftToIgnore = ['go']
+autocmd BufWritePre * if index(ftToIgnore, &ft) < 0 | :Autoformat
 
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 let g:autoformat_remove_trailing_spaces = 1
-
-let g:formatdef_gofmt_1 = '"gofmt | goimports"'
 
 """ airline
 let g:airline#extensions#tabline#enabled = 1
@@ -135,7 +152,7 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 autocmd FileType go setl noexpandtab
 
 " Gray column at 80, 100 and 120 chars
-hi ColorColumn guibg=#242424 ctermbg=234
+hi ColorColumn guibg=#0a0a0a ctermbg=234
 let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
 
 
@@ -147,11 +164,8 @@ set fillchars="fold: "
 set foldmethod=indent
 set foldlevel=99
 
-
-
 """ General settings
 set hidden     " Never unload buffers, instead hide them. This allows switching buffers with unsaved changes
-set hlsearch   " Highlight previous search matches
 set ignorecase " Default ignore case when searching
 set smartcase  " Override ignorecase if a search contains any uppercase characters
 set confirm    " Instead of failing to quit when unsaved, ask if you want to save
@@ -162,6 +176,7 @@ set nobackup           " no backup files or folder
 set noswapfile         " no swap files
 set wildmode=longest,full "Tab completion on commands
 set wildmenu              " ^
+set hlsearch " Don't highlight search matches
 
 " Use very magic matching by default on search and replace
 nnoremap / /\v
@@ -178,4 +193,3 @@ cabbrev Wq wq
 " open this config file
 cabbrev Config e ~/.config/nvim/init.vim
 
-colorscheme jellybeans

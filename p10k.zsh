@@ -74,9 +74,9 @@
       ram                   # free RAM
       # load                  # CPU load
       # time                  # current time
+      public_ip             # public IP address
       # =========================[ Line #2 ]=========================
       newline
-      public_ip             # public IP address
       # proxy                 # system-wide http/https/ftp proxy
       # battery               # internal battery
       # example               # example user-defined segment (see prompt_example function below)
@@ -657,7 +657,7 @@
       '*'       DEFAULT)
   typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_FOREGROUND=000
   typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_BACKGROUND=009
-  typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_VISUAL_IDENTIFIER_EXPANSION=' PRODUCTION '
+  typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_VISUAL_IDENTIFIER_EXPANSION=' WBC PRODUCTION '
   typeset -g POWERLEVEL9K_KUBECONTEXT_ENG_FOREGROUND=009
   typeset -g POWERLEVEL9K_KUBECONTEXT_ENG_VISUAL_IDENTIFIER_EXPANSION=''
 

@@ -24,7 +24,7 @@ export PATH="$PATH:$HOME/bin"
 # golang
 export GOPATH="$HOME/go"
 export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
-export GOPRIVATE="github.com/mx51/*"
+export GOPRIVATE="github.com/mx51/*,github.com/AssemblyPayments/*"
 
 # rust
 export PATH="$PATH:$HOME/.cargo/bin"
