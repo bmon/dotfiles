@@ -28,6 +28,7 @@ alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
+alias msplocal='eval $(minikube docker-env) && msplocal'
 alias dockerbuildscratch='mkdir -p build && touch build/{version,project_deps}.json && ECR_REPO=567505611260.dkr.ecr.ap-southeast-2.amazonaws.com DOCKERFILE=Dockerfile-scratch docker-compose build'
 
 # mitmproxy() {
@@ -92,6 +93,3 @@ ap-start() {
     echo "cd $COMPUTILS_MSP && ./run.sh $SVC -e $EXCLUDE"
     $(cd $COMPUTILS_MSP && ./run.sh $SVC -e $EXCLUDE)
 }
-
-export DOTS=$HOME/git/dotfiles
-export AP=$HOME/go/src/github.com/mx51

@@ -2,8 +2,7 @@
 call plug#begin('~/.local/share/nvim/plugged')
 " Code editing
 Plug 'neovim/nvim-lsp'
-Plug 'nvim-lua/diagnostic-nvim' " Better error highlighting for nvim lsp
-"Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'nvim-lua/completion-nvim' " autocomplpop for nvim native lsp
 
 " Vim Functionality
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "fantastic fuzzy filename completion
@@ -28,6 +27,7 @@ call plug#end()
 """ Initialise colorscheme early to aid nvim-lsp colouring
 set termguicolors
 colorscheme highlite
+highlight PmenuSel ctermfg=162 guifg=#d70087
 
 """ nvim-lsp
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
@@ -39,56 +39,71 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 lua << EOF
-	local nvim_lsp = require'nvim_lsp'
-
-	nvim_lsp.gopls.setup{
+	local lspconfig = require'lspconfig'
+	lspconfig.gopls.setup{
 	    settings = {
 	        gopls = {
 	            buildFlags = {"-tags=endtoend"},
 	            gofumpt = true,
                 usePlaceholders = true,
                 allExperiments = true,
+                experimentalWorkspaceModule = false,
 				["local"] = "github.com/mx51",
                 staticcheck = true,
+                analyses = {
+                    ST1000 = false,  -- Incorrect or missing package comment
+                    ST1003 = false,  -- Poorly chosen identifier (TsMs)
+                }
 	        }
 	    },
-	    on_attach=require'diagnostic'.on_attach
 	}
-	nvim_lsp.vimls.setup{}
-	nvim_lsp.clangd.setup{}
+	lspconfig.clangd.setup{}
 
-	function goimports(timeoutms)
-	  local context = { source = { organizeImports = true } }
-	  vim.validate { context = { context, "t", true } }
+	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+        virtual_text = {
+            prefix = '',
+        },
+      }
+    )
 
-	  local params = vim.lsp.util.make_range_params()
-	  params.context = context
+    -- Synchronously organise (Go) imports.
+    function go_organize_imports_sync(timeout_ms)
+      local context = { source = { organizeImports = true } }
+      vim.validate { context = { context, 't', true } }
+      local params = vim.lsp.util.make_range_params()
+      params.context = context
 
-	  local method = "textDocument/codeAction"
-	  local resp = vim.lsp.buf_request_sync(0, method, params, timeoutms)
-	  if resp and resp[1] then
-	    local result = resp[1].result
-	    if result and result[1] then
-	      local edit = result[1].edit
-	      vim.lsp.util.apply_workspace_edit(edit)
-	    end
-	  end
-
-	  vim.lsp.buf.formatting()
-	end
+      local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+      if not result then return end
+      result = result[1].result
+      if not result then return end
+      edit = result[1].edit
+      vim.lsp.util.apply_workspace_edit(edit)
+    end
 EOF
 
-autocmd BufWritePre *.go lua goimports(1000)
+autocmd BufWritePre *.go lua go_organize_imports_sync(1000)
 
+""" map diagnostic keybinds
+nnoremap <leader>n :lua vim.lsp.diagnostic.goto_next()<cr>
+nnoremap <leader>N :lua vim.lsp.diagnostic.goto_prev()<cr>
+
+""" nvim-completion
 set omnifunc=v:lua.vim.lsp.omnifunc
+autocmd BufWritePre * lua require'completion'.on_attach()
 
-""" nvim-diagnostic for better inline lsp errors
+"Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
 
-let g:diagnostic_enable_virtual_text = 1
-let g:diagnostic_virtual_text_prefix = ''
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
 
-nnoremap <leader>n :NextDiagnosticCycle<cr>
-nnoremap <leader>N :PrevDiagnosticCycle<cr>
+" Avoid showing message extra message when using completion
+set shortmess+=c
 
 """ fzf
 nnoremap <C-p> :Files<cr>
@@ -121,21 +136,6 @@ let g:airline#extensions#whitespace#checks = [] " these checks aren't useful for
 set updatetime=250
 let g:gitgutter_realtime = 1
 let g:gitgutter_eager = 1
-
-""" Omnicompletion on typeing
-function! OpenCompletion()
-    if &ft =~ 'sql'
-        return
-    endif
-
-    if !pumvisible() && ((v:char >= 'a' && v:char <= 'z') || (v:char >= 'A' && v:char <= 'Z'))
-        call feedkeys("\<C-x>\<C-o>", "n")
-    endif
-endfunction
-
-autocmd InsertCharPre * call OpenCompletion()
-set completeopt+=menuone,noinsert,noselect
-set completeopt-=preview
 
 """ Switch buffers with CTRL U or CTRL O
 nnoremap <silent> <C-o> :bnext <CR>

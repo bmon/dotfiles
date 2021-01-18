@@ -16,6 +16,11 @@ else
     alias open=xdg-open
 fi
 
+export DOTS=$HOME/git/dotfiles
+# work
+export AP=$HOME/go/src/github.com/mx51
+export WORKDIR=$AP
+
 export VISUAL=nvim
 export PAGER="less -S"
 # store some custom applications
