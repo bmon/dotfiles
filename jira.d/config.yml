@@ -1,0 +1,18 @@
+endpoint: https://mx51.atlassian.net
+user: brendan@mx51.io
+password-source: keyring
+editor: nvim
+
+project: MERSRV
+
+custom-commands:
+  - name: mine
+    help: display issues assigned to me
+    script: |-
+      # otherwise list issues for all project
+      {{jira}} list --template colorlist --query "resolution = unresolved and assignee=currentuser() ORDER BY created ASC"
+  - name: owned
+    help: display issues created by me
+    script: |-
+      # otherwise list issues for all project
+      {{jira}} list --template colorlist --query "resolution = unresolved and reporter=currentuser() ORDER BY created ASC"
