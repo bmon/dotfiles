@@ -10,15 +10,21 @@ else
         xmodmap ~/.xmodmap
     fi
 
-    eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+    #eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
     export SSH_AUTH_SOCK
 
-    alias open=xdg-open
+    #alias open=xdg-open
 fi
+if [[ "$WSL_DISTRO_NAME" ]]; then
+    export BROWSER="/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
+                                                                                                                           # gpg on wsl https://stackoverflow.com/a/55032706
+    export GPG_TTY=$(tty)
+fi
+
 
 export DOTS=$HOME/git/dotfiles
 # work
-export AP=$HOME/go/src/github.com/mx51
+export AP=$HOME/git/mx51
 export WORKDIR=$AP
 
 export VISUAL=nvim

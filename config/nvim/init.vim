@@ -1,7 +1,7 @@
 ".Brendan Roy's .vimrc
 call plug#begin('~/.local/share/nvim/plugged')
 " Code editing
-Plug 'neovim/nvim-lsp'
+Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim' " autocomplpop for nvim native lsp
 
 " Vim Functionality
@@ -67,23 +67,29 @@ lua << EOF
       }
     )
 
-    -- Synchronously organise (Go) imports.
-    function go_organize_imports_sync(timeout_ms)
-      local context = { source = { organizeImports = true } }
-      vim.validate { context = { context, 't', true } }
-      local params = vim.lsp.util.make_range_params()
-      params.context = context
+    function goimports(timeoutms)
+    	local context = { source = { organizeImports = true } }
+    	vim.validate { context = { context, "t", true } }
 
-      local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-      if not result then return end
-      result = result[1].result
-      if not result then return end
-      edit = result[1].edit
-      vim.lsp.util.apply_workspace_edit(edit)
-    end
+    	local params = vim.lsp.util.make_range_params()
+    	params.context = context
+
+    	local method = "textDocument/codeAction"
+    	local resp = vim.lsp.buf_request_sync(0, method, params, timeoutms)
+    	if resp and resp[1] then
+    	  local result = resp[1].result
+    	  if result and result[1] then
+    	    local edit = result[1].edit
+    	    vim.lsp.util.apply_workspace_edit(edit)
+    	  end
+    	end
+
+    	vim.lsp.buf.formatting()
+  	end
 EOF
 
-autocmd BufWritePre *.go lua go_organize_imports_sync(1000)
+autocmd BufWritePre *.go lua goimports(1000)
+
 
 """ map diagnostic keybinds
 nnoremap <leader>n :lua vim.lsp.diagnostic.goto_next()<cr>

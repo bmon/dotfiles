@@ -28,7 +28,6 @@ alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
-alias msplocal='eval $(minikube docker-env) && msplocal'
 alias dockerbuildscratch='mkdir -p build && touch build/{version,project_deps}.json && ECR_REPO=567505611260.dkr.ecr.ap-southeast-2.amazonaws.com DOCKERFILE=Dockerfile-scratch docker-compose build'
 
 # mitmproxy() {
@@ -43,53 +42,4 @@ prunehist() {
     grep -v ".\{${1:-200}\}" $HISTFILE > ${HISTFILE}_new
     echo $(grep -c ".\{${1:-200}\}" $HISTFILE) entries removed
     mv ${HISTFILE}_new $HISTFILE
-}
-
-# AWS profile switcher
-# Type 'aws-profile' and tab through profiles defined in your ~/.aws/config.
-# Once selected, it exports it as AWS_PROFILE env var that most AWS-aware tools respect.
-if [ -f ~/.aws/config ]; then
-    aws-profile() { export AWS_PROFILE=$1; }
-    complete -W "`sed -nE 's:^\[profile (.+)\]$:\1:p' ~/.aws/config | tr '\n' ' '`" aws-profile
-fi
-
-ap-start() {
-    setopt local_options BASH_REMATCH
-    COMPUTILS_MSP=$AP/computils/devutils/local-runtime/msp
-
-    SVC=$1
-    DO_MAKE=false
-
-
-    if [ -z "$SVC" ] || [ "$SVC" = "-e" ]; then
-        PWD_BASENAME=$(basename "$PWD")
-        regex="^msp\-(.+)$"
-        if [[ $PWD_BASENAME =~ $regex ]] ; then
-            SVC="${BASH_REMATCH[2]}"
-            DO_MAKE=true
-        else
-            echo "usage: ap-start <service-name>"
-            echo "alternatively, start from within msp- repository"
-            return 1
-        fi
-    fi
-
-    if [ "$SVC" = "rtm-dashboard" ] ; then
-        SVC="support-dashboard"
-    fi
-
-    EXCLUDE=$SVC
-
-    if [ "$0" = "-e" ]; then
-        EXCLUDE="$EXCLUDE,$1"
-    elif [ "$1" = "-e" ]; then
-        EXCLUDE="$EXCLUDE,$2"
-    fi
-
-    echo "readying environment for $SVC..."
-    echo "docker-compose -f $COMPUTILS_MSP/docker-compose.yml stop $SVC"
-    docker-compose -f $COMPUTILS_MSP/docker-compose.yml stop $SVC
-
-    echo "cd $COMPUTILS_MSP && ./run.sh $SVC -e $EXCLUDE"
-    $(cd $COMPUTILS_MSP && ./run.sh $SVC -e $EXCLUDE)
 }
