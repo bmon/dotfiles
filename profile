@@ -16,8 +16,8 @@ else
     #alias open=xdg-open
 fi
 if [[ "$WSL_DISTRO_NAME" ]]; then
-    export BROWSER="/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
-                                                                                                                           # gpg on wsl https://stackoverflow.com/a/55032706
+    export BROWSER="wslview"
+    # gpg on wsl https://stackoverflow.com/a/55032706
     export GPG_TTY=$(tty)
 fi
 
@@ -27,6 +27,7 @@ export DOTS=$HOME/git/dotfiles
 export AP=$HOME/git/mx51
 export WORKDIR=$AP
 
+export EDITOR=nvim
 export VISUAL=nvim
 export PAGER="less -S"
 # store some custom applications

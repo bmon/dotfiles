@@ -35,6 +35,7 @@ nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gR    <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
@@ -161,7 +162,6 @@ autocmd FileType go setl noexpandtab
 hi ColorColumn guibg=#0a0a0a ctermbg=234
 let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
 
-
 """ Code folding
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
@@ -169,6 +169,23 @@ vnoremap <Space> zf
 set fillchars="fold: "
 set foldmethod=indent
 set foldlevel=99
+
+""" WSL System Copy Paste
+if executable('win32yank')
+    set clipboard+=unnamedplus
+    let g:clipboard = {
+              \   'name': 'win32yank-wsl',
+              \   'copy': {
+              \      '+': 'win32yank -i --crlf',
+              \      '*': 'win32yank -i --crlf',
+              \    },
+              \   'paste': {
+              \      '+': 'win32yank -o --lf',
+              \      '*': 'win32yank -o --lf',
+              \   },
+              \   'cache_enabled': 0,
+              \ }
+endif
 
 """ General settings
 set hidden     " Never unload buffers, instead hide them. This allows switching buffers with unsaved changes
@@ -183,6 +200,7 @@ set noswapfile         " no swap files
 set wildmode=longest,full "Tab completion on commands
 set wildmenu              " ^
 set hlsearch " Don't highlight search matches
+let g:netrw_fastbrowse = 0 " Close netrw buffer once you open a file
 
 " Use very magic matching by default on search and replace
 nnoremap / /\v
@@ -198,4 +216,3 @@ cabbrev Wq wq
 
 " open this config file
 cabbrev Config e ~/.config/nvim/init.vim
-
