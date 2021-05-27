@@ -1,7 +1,7 @@
 ".Brendan Roy's .vimrc
 call plug#begin('~/.local/share/nvim/plugged')
 " Code editing
-Plug 'neovim/nvim-lsp'
+Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim' " autocomplpop for nvim native lsp
 
 " Vim Functionality
@@ -35,6 +35,7 @@ nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gR    <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
@@ -67,23 +68,29 @@ lua << EOF
       }
     )
 
-    -- Synchronously organise (Go) imports.
-    function go_organize_imports_sync(timeout_ms)
-      local context = { source = { organizeImports = true } }
-      vim.validate { context = { context, 't', true } }
-      local params = vim.lsp.util.make_range_params()
-      params.context = context
+    function goimports(timeoutms)
+    	local context = { source = { organizeImports = true } }
+    	vim.validate { context = { context, "t", true } }
 
-      local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-      if not result then return end
-      result = result[1].result
-      if not result then return end
-      edit = result[1].edit
-      vim.lsp.util.apply_workspace_edit(edit)
-    end
+    	local params = vim.lsp.util.make_range_params()
+    	params.context = context
+
+    	local method = "textDocument/codeAction"
+    	local resp = vim.lsp.buf_request_sync(0, method, params, timeoutms)
+    	if resp and resp[1] then
+    	  local result = resp[1].result
+    	  if result and result[1] then
+    	    local edit = result[1].edit
+    	    vim.lsp.util.apply_workspace_edit(edit)
+    	  end
+    	end
+
+    	vim.lsp.buf.formatting()
+  	end
 EOF
 
-autocmd BufWritePre *.go lua go_organize_imports_sync(1000)
+autocmd BufWritePre *.go lua goimports(1000)
+
 
 """ map diagnostic keybinds
 nnoremap <leader>n :lua vim.lsp.diagnostic.goto_next()<cr>
@@ -155,7 +162,6 @@ autocmd FileType go setl noexpandtab
 hi ColorColumn guibg=#0a0a0a ctermbg=234
 let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
 
-
 """ Code folding
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
@@ -163,6 +169,23 @@ vnoremap <Space> zf
 set fillchars="fold: "
 set foldmethod=indent
 set foldlevel=99
+
+""" WSL System Copy Paste
+if executable('win32yank')
+    set clipboard+=unnamedplus
+    let g:clipboard = {
+              \   'name': 'win32yank-wsl',
+              \   'copy': {
+              \      '+': 'win32yank -i --crlf',
+              \      '*': 'win32yank -i --crlf',
+              \    },
+              \   'paste': {
+              \      '+': 'win32yank -o --lf',
+              \      '*': 'win32yank -o --lf',
+              \   },
+              \   'cache_enabled': 0,
+              \ }
+endif
 
 """ General settings
 set hidden     " Never unload buffers, instead hide them. This allows switching buffers with unsaved changes
@@ -177,6 +200,7 @@ set noswapfile         " no swap files
 set wildmode=longest,full "Tab completion on commands
 set wildmenu              " ^
 set hlsearch " Don't highlight search matches
+let g:netrw_fastbrowse = 0 " Close netrw buffer once you open a file
 
 " Use very magic matching by default on search and replace
 nnoremap / /\v
@@ -192,4 +216,3 @@ cabbrev Wq wq
 
 " open this config file
 cabbrev Config e ~/.config/nvim/init.vim
-

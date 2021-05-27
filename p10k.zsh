@@ -652,12 +652,15 @@
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_VISUAL_IDENTIFIER_EXPANSION='⭐'
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_CONTENT_EXPANSION='> ${P9K_CONTENT} <'
   typeset -g POWERLEVEL9K_KUBECONTEXT_CLASSES=(
-      '*wbc*'   PROD    # These values are examples that are unlikely
-      '*eng*'   ENG # to match your needs. Customize them as needed.
+      '*wbc*'   PROD    # Customer production sites
+      '*gko*'   PROD    #
+      '*till*'  PROD    #
+      '*next*'  PROD    #
+      '*eng*'   ENG     # Engineering development site
       '*'       DEFAULT)
   typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_FOREGROUND=000
   typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_BACKGROUND=009
-  typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_VISUAL_IDENTIFIER_EXPANSION=' WBC PRODUCTION '
+  typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_VISUAL_IDENTIFIER_EXPANSION=' CLIENT PRODUCTION SITE '
   typeset -g POWERLEVEL9K_KUBECONTEXT_ENG_FOREGROUND=009
   typeset -g POWERLEVEL9K_KUBECONTEXT_ENG_VISUAL_IDENTIFIER_EXPANSION=''
 
