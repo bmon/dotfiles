@@ -20,6 +20,8 @@ export DOTS=$HOME/git/dotfiles
 # work
 export AP=$HOME/go/src/github.com/mx51
 export WORKDIR=$AP
+export OPERATOR_USER_DETAILS="email=brendan+admins@mx51.io;mobile_number=0429107503;first_name=brendan;last_name=roy"
+export MERCHANT_USER_DETAILS="email=brendan+merchant-admins@mx51.io;mobile_number=0429107503;first_name=brendan;last_name=roy"
 
 export VISUAL=nvim
 export PAGER="less -S"

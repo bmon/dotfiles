@@ -28,7 +28,6 @@ alias :e=vim
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
-alias msplocal='eval $(minikube docker-env) && msplocal'
 alias dockerbuildscratch='mkdir -p build && touch build/{version,project_deps}.json && ECR_REPO=567505611260.dkr.ecr.ap-southeast-2.amazonaws.com DOCKERFILE=Dockerfile-scratch docker-compose build'
 
 # mitmproxy() {
