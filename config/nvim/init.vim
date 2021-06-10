@@ -159,8 +159,8 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 autocmd FileType go setl noexpandtab
 
 " Gray column at 80, 100 and 120 chars
-hi ColorColumn guibg=#0a0a0a ctermbg=234
-let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
+"hi ColorColumn guibg=#0a0a0a ctermbg=234
+"let &colorcolumn="80,".join(range(100,120),",").join(range(120,999),",")
 
 """ Code folding
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>

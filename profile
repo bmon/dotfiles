@@ -9,18 +9,16 @@ else
     if command -v xmodmap 1>/dev/null 2>&1 && [[ -v $DISPLAY ]] ; then
         xmodmap ~/.xmodmap
     fi
-
-    #eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-    export SSH_AUTH_SOCK
-
-    #alias open=xdg-open
 fi
+
 if [[ "$WSL_DISTRO_NAME" ]]; then
     export BROWSER="wslview"
-    # gpg on wsl https://stackoverflow.com/a/55032706
-    export GPG_TTY=$(tty)
-fi
 
+    eval $(keychain --eval --quiet id_rsa)
+
+    export GPG_TTY=$(tty)
+    gpg-connect-agent updatestartuptty /bye >/dev/null
+fi
 
 export DOTS=$HOME/git/dotfiles
 # work
@@ -42,13 +40,6 @@ export GOPRIVATE="github.com/mx51/*,github.com/AssemblyPayments/*"
 
 # rust
 export PATH="$PATH:$HOME/.cargo/bin"
-
-if [[ -f "$HOME/.okta/bash_functions" ]]; then
-    . "$HOME/.okta/bash_functions"
-fi
-if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
-    PATH="$HOME/.okta/bin:$PATH"
-fi
 
 export AWS_REGION="ap-southeast-2"
 
