@@ -71,10 +71,10 @@
       # nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
       # ranger                  # ranger shell (https://github.com/ranger/ranger)
       # vpn_ip                # virtual private network indicator
-      ram                   # free RAM
+      # ram                   # free RAM
       # load                  # CPU load
       # time                  # current time
-      public_ip             # public IP address
+      # public_ip             # public IP address
       # =========================[ Line #2 ]=========================
       newline
       # proxy                 # system-wide http/https/ftp proxy

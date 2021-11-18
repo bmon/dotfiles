@@ -14,17 +14,19 @@ alias -g ......='../../../../..'
 alias ll="ls -l"
 alias la="ls -la"
 alias rg="rg --ignore-case --hidden --max-columns 1000 --max-columns-preview"
+alias k="kubectl"
 alias rp="rsync -ah --info=progress2"
 alias mkdirs="mkdir -p"
+alias gcm="git checkout master && git pull origin"
 
 alias genpasswd="head -c 200 /dev/urandom | shasum | base64 | head -c 32 ; echo"
 alias ebprod="eb status app-production | awk '\$2 == \"Version:\" {print \$3}'"
 
 alias pacman="sudo pacman"
 
-alias nvim=/usr/local/bin/nvim # installed from source
 alias vim=nvim
 alias :e=vim
+alias ipython="python -m IPython"
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 

@@ -59,6 +59,8 @@ lua << EOF
 	    },
 	}
 	lspconfig.clangd.setup{}
+    lspconfig.tsserver.setup{}
+    lspconfig.vuels.setup{}
 
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
       vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -130,6 +132,7 @@ autocmd BufWritePre * if index(ftToIgnore, &ft) < 0 | :Autoformat
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 let g:autoformat_remove_trailing_spaces = 1
+let g:formatters_vue = ['stylelint']
 
 """ airline
 let g:airline#extensions#tabline#enabled = 1
@@ -154,7 +157,7 @@ autocmd BufEnter * :syntax sync fromstart " Fix syntax highliging errors when sw
 
 """ Indendation and filetype maps
 set shiftwidth=4 tabstop=4 expandtab
-autocmd FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex setl sw=2 ts=2
+autocmd FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex,vue setl sw=2 ts=2
 autocmd FileType json syntax match Comment +\/\/.\+$+
 autocmd FileType go setl noexpandtab
 

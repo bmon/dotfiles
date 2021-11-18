@@ -38,7 +38,7 @@
 
     # nicer git log
     lg = log --color --graph --pretty=format:'%C(magenta)%h%Creset %C(bold blue)<%an>%Creset %C(dim red)%cr%Creset - %s%C(yellow)%d%Creset' --abbrev-commit
-    changelog = log --color --graph --pretty=format:'%D %s' --abbrev-commit
+    changelog = !git log --graph --pretty=format:'%D %s' --abbrev-commit | sed 's/HEAD....master, //' | sed 's/, origin.master, origin.HEAD//g' | less
     br = branch -vv
 
     # Today I discovered you can start an alias with ! to execute it as a shell
