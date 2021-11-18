@@ -26,10 +26,3 @@ echo "Successfully copied file to dotfiles repo"
 ln -s $(pwd)/$FILENAME $LINKNAME
 
 echo "Successfully linked file in home dir"
-echo "Committing changes..."
-
-# add and commit the new file
-git add $FILENAME
-git commit -m "register $FILENAME"
-
-echo "$FILENAME registered successfully!"
