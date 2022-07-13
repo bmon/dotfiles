@@ -83,7 +83,7 @@ lua << EOF
     	  local result = resp[1].result
     	  if result and result[1] then
     	    local edit = result[1].edit
-    	    vim.lsp.util.apply_workspace_edit(edit)
+    	    vim.lsp.util.apply_workspace_edit(edit, "utf-16")
     	  end
     	end
 
@@ -95,8 +95,8 @@ autocmd BufWritePre *.go lua goimports(1000)
 
 
 """ map diagnostic keybinds
-nnoremap <leader>n :lua vim.lsp.diagnostic.goto_next()<cr>
-nnoremap <leader>N :lua vim.lsp.diagnostic.goto_prev()<cr>
+nnoremap <leader>n :lua vim.diagnostic.goto_next()<cr>
+nnoremap <leader>N :lua vim.diagnostic.goto_prev()<cr>
 
 """ nvim-completion
 set omnifunc=v:lua.vim.lsp.omnifunc
