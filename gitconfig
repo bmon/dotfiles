@@ -75,7 +75,7 @@
 # hasn't broken anything for me since I added this setting in 2015.
 [url "git@github.com:"]
     insteadOf = gh:
-	insteadOf = https://github.com/
+    insteadOf = https://github.com
 
 [url "git@git.sr.ht:"]
     insteadOf = srht:

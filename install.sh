@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IGNORE=('install.sh' 'README.md' 'register.sh' 'shell_up.sh' 'backup*')
+IGNORE=('install.sh' 'README.md' 'register.sh' 'backup*')
 NO_DOT=('bin*')
 
 containsElement () {
@@ -44,3 +44,9 @@ for FILENAME in $(find * -type f); do
     # link the dotfile to the home directory
     ln -s $(pwd)/$FILENAME $LINKNAME
 done
+
+# post dotfiles setup
+
+mkdir -p ~/.zsh
+git clone --depth=1 git@github.com:romkatv/powerlevel10k.git $HOME/.zsh/powerlevel10k
+git clone git@github.com:zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
