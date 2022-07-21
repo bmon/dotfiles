@@ -83,7 +83,7 @@ lua << EOF
     	  local result = resp[1].result
     	  if result and result[1] then
     	    local edit = result[1].edit
-    	    vim.lsp.util.apply_workspace_edit(edit)
+    	    vim.lsp.util.apply_workspace_edit(edit, "utf-16")
     	  end
     	end
 

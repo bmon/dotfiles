@@ -1,12 +1,9 @@
 #!/bin/bash
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    export PYTHON_CONFIGURE_OPTS="--enable-framework"
+if [[ $OSTYPE == "darwin"* ]]; then
     export PATH="$PATH:/Applications/Google Chrome.app/Contents/MacOS"
-    export PATH="$PATH:/Library/Frameworks/Mono.framework/Versions/Current/Commands"
-    export PATH="$PATH:/usr/local/opt/mysql-client/bin:"
-    #export VIMRUNTIME=/Applications/MacVim.app/Contents/Resources/vim/runtime
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 else
-    if command -v xmodmap 1>/dev/null 2>&1 && [[ -v $DISPLAY ]] ; then
+    if command -v xmodmap 1>/dev/null 2>&1 && [[ ! -z $DISPLAY ]] ; then
         xmodmap ~/.xmodmap
     fi
 fi
@@ -15,19 +12,16 @@ if [[ "$WSL_DISTRO_NAME" ]]; then
     export BROWSER="wslview"
 fi
 
-export GPG_TTY=$(tty)
-gpg-connect-agent updatestartuptty /bye >/dev/null
-unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-fi
+#export GPG_TTY=$(tty)
+#gpg-connect-agent updatestartuptty /bye >/dev/null
+#unset SSH_AGENT_PID
+#if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+#  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+#fi
+eval $(ssh-agent)
 
+export WD=$HOME/git/12kmps
 export DOTS=$HOME/git/dotfiles
-# work
-export AP=$HOME/git/mx51
-export WORKDIR=$AP
-export OPERATOR_USER_DETAILS="email=brendan+admins@mx51.io;mobile_number=0429107503;first_name=brendan;last_name=roy"
-export MERCHANT_USER_DETAILS="email=brendan+merchant-admins@mx51.io;mobile_number=0429107503;first_name=brendan;last_name=roy"
 
 export EDITOR=nvim
 export VISUAL=nvim
@@ -38,7 +32,7 @@ export PATH="$PATH:$HOME/bin"
 # golang
 export GOPATH="$HOME/go"
 export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
-export GOPRIVATE="github.com/mx51/*,github.com/AssemblyPayments/*"
+export GOPRIVATE="github.com/12kmps/*"
 
 # rust
 export PATH="$PATH:$HOME/.cargo/bin"
