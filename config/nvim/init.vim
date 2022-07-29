@@ -2,7 +2,11 @@
 call plug#begin('~/.local/share/nvim/plugged')
 " Code editing
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim' " autocomplpop for nvim native lsp
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
 
 " Vim Functionality
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "fantastic fuzzy filename completion
@@ -40,27 +44,56 @@ nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 lua << EOF
-	local lspconfig = require'lspconfig'
-	lspconfig.gopls.setup{
-	    settings = {
-	        gopls = {
-	            buildFlags = {"-tags=endtoend"},
-	            gofumpt = true,
+    -- Setup nvim-cmp.
+    local cmp = require'cmp'
+
+    cmp.setup({
+        snippet = {
+            expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+            end,
+        },
+            window = {},
+            mapping = cmp.mapping.preset.insert({
+                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                ['<C-Space>'] = cmp.mapping.complete(),
+                ['<C-e>'] = cmp.mapping.abort(),
+                ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                ['<TAB>'] = cmp.mapping.confirm({ select = true }),
+            }),
+            sources = cmp.config.sources({
+                 { name = 'nvim_lsp' },
+            }, {
+                { name = 'buffer' },
+            })
+    })
+
+    -- Setup lspconfig.
+    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+	local lsp = require "lspconfig"
+	lsp.gopls.setup{
+        capabilities = capabilities,
+        settings = {
+            gopls = {
+                buildFlags = {"-tags=endtoend"},
+                gofumpt = true,
                 usePlaceholders = true,
                 allExperiments = true,
                 experimentalWorkspaceModule = false,
-				["local"] = "github.com/mx51",
+    			["local"] = "github.com/mx51",
                 staticcheck = true,
                 analyses = {
                     ST1000 = false,  -- Incorrect or missing package comment
                     ST1003 = false,  -- Poorly chosen identifier (TsMs)
                 }
-	        }
-	    },
-	}
-	lspconfig.clangd.setup{}
-    lspconfig.tsserver.setup{}
-    lspconfig.vuels.setup{}
+            }
+        }
+    }
+
+    lsp.clangd.setup{capabilities = capabilities}
+    lsp.tsserver.setup{capabilities = capabilities}
+    lsp.vuels.setup{capabilities = capabilities}
 
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
       vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -97,23 +130,7 @@ autocmd BufWritePre *.go lua goimports(1000)
 """ map diagnostic keybinds
 nnoremap <leader>n :lua vim.diagnostic.goto_next()<cr>
 nnoremap <leader>N :lua vim.diagnostic.goto_prev()<cr>
-
-""" nvim-completion
-set omnifunc=v:lua.vim.lsp.omnifunc
-autocmd BufWritePre * lua require'completion'.on_attach()
-
-"Use <Tab> and <S-Tab> to navigate through popup menu
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
-
-" Set completeopt to have a better completion experience
-set completeopt=menuone,noinsert,noselect
-
-" Avoid showing message extra message when using completion
-set shortmess+=c
-
+"
 """ fzf
 nnoremap <C-p> :Files<cr>
 

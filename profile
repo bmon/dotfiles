@@ -10,6 +10,7 @@ fi
 
 if [[ "$WSL_DISTRO_NAME" ]]; then
     export BROWSER="wslview"
+    export WINHOME="/mnt/c/Users/brendan"
 fi
 
 #export GPG_TTY=$(tty)
@@ -18,7 +19,6 @@ fi
 #if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 #  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 #fi
-eval $(ssh-agent)
 
 export WD=$HOME/git/12kmps
 export DOTS=$HOME/git/dotfiles

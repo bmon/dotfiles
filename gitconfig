@@ -83,11 +83,11 @@
 [url "git@source.servian.com:"]
     insteadOf = serv:
 
-# I have a second gitconfig located at ~/git/servian/.gitconfig
-# which defines additional settings, specific to servian repositories
+# I have a second gitconfig located under work git directories
+# which defines additional settings, specific to work repositories
 # (different public key, different email, etc)
-[includeIf "gitdir:~/go/src/github.com/AssemblyPayments/"]
-    path = ~/go/src/github.com/AssemblyPayments/.gitconfig
+[includeIf "gitdir:~/git/mx51/"]
+    path = ~/git/mx51/.gitconfig
 
 [color]
     status = auto
