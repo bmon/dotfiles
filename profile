@@ -20,7 +20,7 @@ fi
 #  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 #fi
 
-export WD=$HOME/git/12kmps
+export WD=$HOME/git/mx51
 export DOTS=$HOME/git/dotfiles
 
 export EDITOR=nvim
@@ -32,7 +32,7 @@ export PATH="$PATH:$HOME/bin"
 # golang
 export GOPATH="$HOME/go"
 export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
-export GOPRIVATE="github.com/12kmps/*"
+export GOPRIVATE="github.com/mx51/*"
 
 # rust
 export PATH="$PATH:$HOME/.cargo/bin"

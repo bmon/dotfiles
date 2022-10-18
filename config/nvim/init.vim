@@ -70,7 +70,7 @@ lua << EOF
     })
 
     -- Setup lspconfig.
-    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
 	local lsp = require "lspconfig"
 	lsp.gopls.setup{
         capabilities = capabilities,
@@ -130,7 +130,7 @@ autocmd BufWritePre *.go lua goimports(1000)
 """ map diagnostic keybinds
 nnoremap <leader>n :lua vim.diagnostic.goto_next()<cr>
 nnoremap <leader>N :lua vim.diagnostic.goto_prev()<cr>
-"
+
 """ fzf
 nnoremap <C-p> :Files<cr>
 
@@ -190,9 +190,9 @@ set fillchars="fold: "
 set foldmethod=indent
 set foldlevel=99
 
+set clipboard+=unnamedplus
 """ WSL System Copy Paste
 if executable('win32yank')
-    set clipboard+=unnamedplus
     let g:clipboard = {
               \   'name': 'win32yank-wsl',
               \   'copy': {
