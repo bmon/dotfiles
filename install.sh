@@ -48,5 +48,5 @@ done
 # post dotfiles setup
 
 mkdir -p ~/.zsh
-git clone --depth=1 git@github.com:romkatv/powerlevel10k.git $HOME/.zsh/powerlevel10k
-git clone git@github.com:zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.zsh/powerlevel10k
+git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
