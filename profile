@@ -11,9 +11,13 @@ fi
 if [[ "$WSL_DISTRO_NAME" ]]; then
     export BROWSER="wslview"
     export WINHOME="/mnt/c/Users/brendan"
+    export GPG_TTY=$(tty)
+
+    if [[ -z "$SSH_AUTH_SOCK" ]]; then 
+        eval $(ssh-agent)
+    fi
 fi
 
-#export GPG_TTY=$(tty)
 #gpg-connect-agent updatestartuptty /bye >/dev/null
 #unset SSH_AGENT_PID
 #if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
@@ -21,13 +25,14 @@ fi
 #fi
 
 export WD=$HOME/git/mx51
+export WORKDIR=$HOME/git/mx51
 export DOTS=$HOME/git/dotfiles
 
 export EDITOR=nvim
 export VISUAL=nvim
 export PAGER="less -S"
 # store some custom applications
-export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 
 # golang
 export GOPATH="$HOME/go"

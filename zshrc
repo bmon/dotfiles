@@ -47,6 +47,7 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.g
 
 # source profile and aliases
 source ~/.profile
+source ~/.profile.private
 source ~/.aliases
 
 # zsh history

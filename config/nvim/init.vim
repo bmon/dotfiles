@@ -25,6 +25,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'Iron-E/nvim-highlite'
 "Plug 'flazz/vim-colorschemes'
+Plug 'udalov/kotlin-vim'
 
 call plug#end()
 
@@ -80,7 +81,6 @@ lua << EOF
                 gofumpt = true,
                 usePlaceholders = true,
                 allExperiments = true,
-                experimentalWorkspaceModule = false,
     			["local"] = "github.com/mx51",
                 staticcheck = true,
                 analyses = {
@@ -103,29 +103,35 @@ lua << EOF
       }
     )
 
-    function goimports(timeoutms)
-    	local context = { source = { organizeImports = true } }
-    	vim.validate { context = { context, "t", true } }
+    vim.api.nvim_create_augroup('AutoFormatting', {})
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      pattern = '*.go',
+      group = 'AutoFormatting',
+      callback = function()
+        local params = vim.lsp.util.make_range_params()
+        params.context = {only = {"source.organizeImports"}}
+        -- buf_request_sync defaults to a 1000ms timeout. Depending on your
+        -- machine and codebase, you may want longer. Add an additional
+        -- argument after params if you find that you have to write the file
+        -- twice for changes to be saved.
+        -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+        local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+        for cid, res in pairs(result or {}) do
+          for _, r in pairs(res.result or {}) do
+            if r.edit then
+              local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+              vim.lsp.util.apply_workspace_edit(r.edit, enc)
+            end
+          end
+        end
+        vim.lsp.buf.format({async = false})
+      end,
+    })
 
-    	local params = vim.lsp.util.make_range_params()
-    	params.context = context
-
-    	local method = "textDocument/codeAction"
-    	local resp = vim.lsp.buf_request_sync(0, method, params, timeoutms)
-    	if resp and resp[1] then
-    	  local result = resp[1].result
-    	  if result and result[1] then
-    	    local edit = result[1].edit
-    	    vim.lsp.util.apply_workspace_edit(edit, "utf-16")
-    	  end
-    	end
-
-    	vim.lsp.buf.formatting()
-  	end
 EOF
 
-autocmd BufWritePre *.go lua goimports(1000)
-
+""" python3 support
+let g:python3_host_prog="/usr/sbin/python"
 
 """ map diagnostic keybinds
 nnoremap <leader>n :lua vim.diagnostic.goto_next()<cr>
@@ -221,6 +227,7 @@ set wildmode=longest,full "Tab completion on commands
 set wildmenu              " ^
 set hlsearch " Don't highlight search matches
 let g:netrw_fastbrowse = 0 " Close netrw buffer once you open a file
+set mouse= " disable mouse support
 
 " Use very magic matching by default on search and replace
 nnoremap / /\v

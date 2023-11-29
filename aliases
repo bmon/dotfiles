@@ -30,7 +30,7 @@ alias ipython="python -m IPython"
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 
-alias dockerbuildscratch='mkdir -p build && touch build/{version,project_deps}.json && ECR_REPO=567505611260.dkr.ecr.ap-southeast-2.amazonaws.com DOCKERFILE=Dockerfile-scratch docker-compose build'
+alias awslocal="AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test AWS_DEFAULT_REGION=${DEFAULT_REGION:-$AWS_DEFAULT_REGION} aws --endpoint-url=http://${LOCALSTACK_HOST:-localhost}:4566"
 
 # mitmproxy() {
 #     networksetup -setwebproxystate wi-fi on
