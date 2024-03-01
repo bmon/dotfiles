@@ -7,6 +7,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+Plug 'github/copilot.vim'
 
 " Vim Functionality
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "fantastic fuzzy filename completion
@@ -18,6 +19,7 @@ Plug 'tpope/vim-rhubarb'  "Github integration for fugitive
 Plug 'tpope/vim-eunuch'   "QoL commands like :SudoWrite
 Plug 'tpope/vim-abolish'  "case respectful search and replace via :%S
 Plug 'ncm2/float-preview.nvim' "Floating completion pane
+Plug 'rhysd/conflict-marker.vim' "Git conflict markers
 
 " Visuals
 Plug 'vim-airline/vim-airline'
@@ -61,7 +63,7 @@ lua << EOF
                 ['<C-Space>'] = cmp.mapping.complete(),
                 ['<C-e>'] = cmp.mapping.abort(),
                 ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-                ['<TAB>'] = cmp.mapping.confirm({ select = true }),
+                -- ['<TAB>'] = cmp.mapping.confirm({ select = true }),
             }),
             sources = cmp.config.sources({
                  { name = 'nvim_lsp' },
@@ -127,7 +129,6 @@ lua << EOF
         vim.lsp.buf.format({async = false})
       end,
     })
-
 EOF
 
 """ python3 support

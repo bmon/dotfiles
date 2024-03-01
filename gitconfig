@@ -111,3 +111,5 @@
 	rebase = false
 [init]
 	defaultBranch = master
+[http]
+	cookiefile = /home/brendan/.gitcookies
