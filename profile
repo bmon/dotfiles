@@ -2,6 +2,11 @@
 if [[ $OSTYPE == "darwin"* ]]; then
     export PATH="$PATH:/Applications/Google Chrome.app/Contents/MacOS"
     eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    export GPG_TTY=$(tty) # required for macos gpg: https://gist.github.com/repodevs/a18c7bb42b2ab293155aca889d447f1b
+    if [[ -z "$SSH_AUTH_SOCK" ]]; then 
+        eval $(ssh-agent)
+    fi
 else
     if command -v xmodmap 1>/dev/null 2>&1 && [[ ! -z $DISPLAY ]] ; then
         xmodmap ~/.xmodmap
@@ -18,11 +23,13 @@ if [[ "$WSL_DISTRO_NAME" ]]; then
     fi
 fi
 
+
 #gpg-connect-agent updatestartuptty /bye >/dev/null
 #unset SSH_AGENT_PID
 #if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 #  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 #fi
+
 
 export WD=$HOME/git/mx51
 export WORKDIR=$HOME/git/mx51
@@ -52,3 +59,4 @@ if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-c
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+. "$HOME/.cargo/env"

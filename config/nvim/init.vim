@@ -94,6 +94,7 @@ lua << EOF
     lsp.clangd.setup{capabilities = capabilities}
     lsp.tsserver.setup{capabilities = capabilities}
     lsp.vuels.setup{capabilities = capabilities}
+    lsp.rust_analyzer.setup{capabilities = capabilities}
 
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
       vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -127,7 +128,6 @@ lua << EOF
         vim.lsp.buf.format({async = false})
       end,
     })
-
 EOF
 
 """ python3 support
