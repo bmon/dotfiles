@@ -43,7 +43,7 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=244,underline"
 
 # fzf is a ctrl-r improvement https://github.com/junegunn/fzf
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+command -v fzf > /dev/null && source <(fzf --zsh)
 
 # source profile and aliases
 source ~/.profile

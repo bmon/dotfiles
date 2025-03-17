@@ -44,6 +44,7 @@ vim.keymap.set("n", "<leader>n", "<cmd>lua vim.diagnostic.goto_next()<CR>", { si
 vim.keymap.set("n", "<leader>N", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader>c", "<cmd>vert belowright Copilot panel<CR>", { silent = true })
+vim.keymap.set("n", "<leader>l", "<cmd>Lazy update<CR>", { silent = true })
 
 --""" Code folding
 vim.keymap.set("n", "<Space>", "@=(foldlevel('.')?'za':'<Space>')<CR>", { silent = true })
@@ -113,7 +114,7 @@ require("lazy").setup({
 		},
 		{ "vim-airline/vim-airline-themes" },
 
-		{ "junegunn/fzf", dir = "~/.fzf", build = "./install --all" },
+		{ "junegunn/fzf" },
 		{ "junegunn/fzf.vim" }, --fzf extensions for vim
 		{ "christoomey/vim-tmux-navigator" }, --Navigagte vim splits like tmux
 
@@ -228,10 +229,37 @@ lsp.gopls.setup({
 		},
 	},
 })
-lsp.tsserver.setup({ capabilities = capabilities })
-lsp.vuels.setup({ capabilities = capabilities })
+require("lspconfig").ts_ls.setup({ capabilities = capabilities })
+require("lspconfig").vuels.setup({ capabilities = capabilities })
+require('lspconfig').ruff.setup {
+  on_attach = on_attach,
+}
+require('lspconfig').pyright.setup {
+  settings = {
+    pyright = {
+      -- Using Ruff's import organizer
+      disableOrganizeImports = true,
+    },
+    python = {
+      analysis = {
+        -- Ignore all files for analysis to exclusively use Ruff for linting
+        ignore = { '*' },
+      },
+    },
+  },
+}
+
+local on_attach = function(client, bufnr)
+  if client.name == 'ruff' then
+    -- Disable hover in favor of Pyright
+    client.server_capabilities.hoverProvider = false
+  end
+end
+
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 	virtual_text = {
 		prefix = "",
 	},
 })
+
+

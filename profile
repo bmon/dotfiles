@@ -47,7 +47,7 @@ export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
 export GOPRIVATE="github.com/mx51/*"
 
 # rust
-export PATH="$PATH:$HOME/.cargo/bin"
+[ -d "$HOME/.cargo" ] && export PATH="$PATH:$HOME/.cargo/bin" && . "$HOME/.cargo/env"
 
 export AWS_REGION="ap-southeast-2"
 
@@ -59,4 +59,6 @@ if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-c
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
-. "$HOME/.cargo/env"
+
+eval "$(pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
