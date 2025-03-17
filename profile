@@ -23,14 +23,6 @@ if [[ "$WSL_DISTRO_NAME" ]]; then
     fi
 fi
 
-
-#gpg-connect-agent updatestartuptty /bye >/dev/null
-#unset SSH_AGENT_PID
-#if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-#  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-#fi
-
-
 export WD=$HOME/git/mx51
 export WORKDIR=$HOME/git/mx51
 export DOTS=$HOME/git/dotfiles
@@ -38,6 +30,7 @@ export DOTS=$HOME/git/dotfiles
 export EDITOR=nvim
 export VISUAL=nvim
 export PAGER="less -S"
+
 # store some custom applications
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 
@@ -49,6 +42,20 @@ export GOPRIVATE="github.com/mx51/*"
 # rust
 [ -d "$HOME/.cargo" ] && export PATH="$PATH:$HOME/.cargo/bin" && . "$HOME/.cargo/env"
 
+# python
+if command -v pyenv 2>&1 >/dev/null; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+
+    eval "$(pyenv init --path - zsh)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+
+
+# Clouds
 export AWS_REGION="ap-southeast-2"
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -57,8 +64,3 @@ if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-s
 # The next line enables shell command completion for gcloud.
 if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-cloud-sdk/completion.zsh.inc'; fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
-
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
