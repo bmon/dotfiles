@@ -1,0 +1,27 @@
+""" Plugins  --------------------------------
+set easymotion
+
+""" Common settings -------------------------
+set showmode
+set so=5
+set nu
+set hlsearch
+
+""" Idea specific settings ------------------
+set ideajoin
+set ideastatusicon=gray
+
+""" My Mappings -----------------------------
+map <leader>f <Plug>(easymotion-s)
+map <leader>e <Plug>(easymotion-f)
+
+nmap gd <Action>(GotoDeclaration)
+nmap gr <Action>(FindUsages)
+
+map <leader>d <Action>(Debug)
+map <leader>r <Action>(RenameElement)
+map <leader>c <Action>(Stop)
+
+map <leader>s <Action>(SelectInProjectView)
+map <leader>a <Action>(Annotate)
+map <leader>n <Action>(GotoNextError)

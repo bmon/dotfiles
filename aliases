@@ -26,7 +26,6 @@ alias pacman="sudo pacman"
 
 alias vim=nvim
 alias :e=vim
-alias ipython="python -m IPython"
 
 alias fixwifi="sudo ifconfig en0 down; sudo ifconfig en0 up"
 

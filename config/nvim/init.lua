@@ -103,16 +103,16 @@ require("lazy").setup({
 		{ "hrsh7th/vim-vsnip" },
 		{ "github/copilot.vim" },
 
-		{
-			"vim-airline/vim-airline",
-			init = function()
-				vim.g["airline#extensions#tabline#enabled"] = 1
-				vim.g["airline#extensions#tabline#formatter"] = "unique_tail"
-				vim.g["airline_theme"] = "base16_embers"
-				vim.g["airline_section_z"] = "%p%%" -- Don't bother with cols, max lineno, etc
-			end,
-		},
-		{ "vim-airline/vim-airline-themes" },
+		--{
+		--	"vim-airline/vim-airline",
+		--	init = function()
+		--		vim.g["airline#extensions#tabline#enabled"] = 1
+		--		vim.g["airline#extensions#tabline#formatter"] = "unique_tail"
+		--		vim.g["airline_theme"] = "base16_embers"
+		--		vim.g["airline_section_z"] = "%p%%" -- Don't bother with cols, max lineno, etc
+		--	end,
+		--},
+		--{ "vim-airline/vim-airline-themes" },
 
 		{ "junegunn/fzf" },
 		{ "junegunn/fzf.vim" }, --fzf extensions for vim
@@ -182,7 +182,11 @@ require("lazy").setup({
 
 	install = { colorscheme = { "habamax" } },
 	-- automatically check for plugin updates
-	checker = { enabled = true },
+	checker = {
+		enabled = true,
+		notify = true,
+		frequency = 86400, -- check for updates once a day
+	},
 })
 
 -- Setup nvim-cmp.
@@ -231,29 +235,29 @@ lsp.gopls.setup({
 })
 require("lspconfig").ts_ls.setup({ capabilities = capabilities })
 require("lspconfig").vuels.setup({ capabilities = capabilities })
-require('lspconfig').ruff.setup {
-  on_attach = on_attach,
-}
-require('lspconfig').pyright.setup {
-  settings = {
-    pyright = {
-      -- Using Ruff's import organizer
-      disableOrganizeImports = true,
-    },
-    python = {
-      analysis = {
-        -- Ignore all files for analysis to exclusively use Ruff for linting
-        ignore = { '*' },
-      },
-    },
-  },
-}
+require("lspconfig").ruff.setup({
+	on_attach = on_attach,
+})
+require("lspconfig").pyright.setup({
+	settings = {
+		pyright = {
+			-- Using Ruff's import organizer
+			disableOrganizeImports = true,
+		},
+		python = {
+			analysis = {
+				-- Ignore all files for analysis to exclusively use Ruff for linting
+				ignore = { "*" },
+			},
+		},
+	},
+})
 
 local on_attach = function(client, bufnr)
-  if client.name == 'ruff' then
-    -- Disable hover in favor of Pyright
-    client.server_capabilities.hoverProvider = false
-  end
+	if client.name == "ruff" then
+		-- Disable hover in favor of Pyright
+		client.server_capabilities.hoverProvider = false
+	end
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -261,5 +265,3 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 		prefix = "",
 	},
 })
-
-
