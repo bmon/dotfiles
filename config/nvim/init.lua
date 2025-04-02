@@ -97,12 +97,18 @@ require("lazy").setup({
 	spec = {
 		{ "neovim/nvim-lspconfig" },
 		{ "hrsh7th/cmp-nvim-lsp" },
-		{ "hrsh7th/nvim-cmp" },
-		{ "hrsh7th/cmp-buffer" },
+		{ "hrsh7th/nvim-cmp", commit = "1e1900b0769324a9675ef85b38f99cca29e203b3" },
+		{ "hrsh7th/cmp-buffer", commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
 		{ "hrsh7th/cmp-vsnip" },
 		{ "hrsh7th/vim-vsnip" },
 		{ "github/copilot.vim" },
 
+		{
+			"nvim-lualine/lualine.nvim",
+			config = function(_, opts)
+				require("lualine").setup(opts)
+			end,
+		},
 		--{
 		--	"vim-airline/vim-airline",
 		--	init = function()
@@ -189,7 +195,6 @@ require("lazy").setup({
 	},
 })
 
--- Setup nvim-cmp.
 local cmp = require("cmp")
 cmp.setup({
 	snippet = {

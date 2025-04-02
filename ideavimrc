@@ -1,25 +1,42 @@
-""" Plugins  --------------------------------
+"""
+let mapleader="\"
+
+command! Config e ~/.ideavimrc
+nnoremap <leader>ce :e ~/.ideavimrc<CR>
+nnoremap <leader>cr :action IdeaVim.ReloadVimRc.reload<CR>
+
+""" easymotion ------------------------------
 set easymotion
+map <leader>f <Plug>(easymotion-s)
+map <leader>e <Plug>(easymotion-f)
 
 """ Common settings -------------------------
 set showmode
-set so=5
-set nu
+set scrolloff=5
+set number
+" case sensitive search only when case specified
+set ignorecase
+set smartcase
 set hlsearch
+" Share system clipboard
+set clipboard+=unnamed
+set clipboard+=ideaput
 
 """ Idea specific settings ------------------
 set ideajoin
 set ideastatusicon=gray
 
 """ My Mappings -----------------------------
-map <leader>f <Plug>(easymotion-s)
-map <leader>e <Plug>(easymotion-f)
-
 nmap gd <Action>(GotoDeclaration)
 nmap gr <Action>(FindUsages)
+nmap gR <Action>(RenameElement)
+
+nnoremap <C-u> :tabprevious<CR>
+nnoremap <C-o> :tabnext<CR>
+nnoremap <C-p> :action GotoFile<CR>
 
 map <leader>d <Action>(Debug)
-map <leader>r <Action>(RenameElement)
+map <leader>r <Action>(RerunFailedTests)
 map <leader>c <Action>(Stop)
 
 map <leader>s <Action>(SelectInProjectView)
