@@ -36,6 +36,7 @@ vim.keymap.set("n", "<c]>", "<cmd>lua vim.lsp.buf.declaration()<CR>", { silent =
 vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<CR>", { silent = true })
 vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
 vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { silent = true })
+vim.keymap.set("n", "gvr", "<cmd>vert lua vim.lsp.buf.references()<CR>", { silent = true })
 vim.keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
 vim.keymap.set("n", "g0", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", { silent = true })
 vim.keymap.set("n", "gW", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", { silent = true })
@@ -94,32 +95,35 @@ end
 
 -- Setup lazy.nvim
 require("lazy").setup({
+	install = { colorscheme = { "habamax" } },
+	-- automatically check for plugin updates
+	checker = {
+		enabled = true,
+		notify = true,
+		frequency = 604800, -- check for updates once a week
+	},
 	spec = {
 		{ "neovim/nvim-lspconfig" },
 		{ "hrsh7th/cmp-nvim-lsp" },
-		{ "hrsh7th/nvim-cmp", commit = "1e1900b0769324a9675ef85b38f99cca29e203b3" },
-		{ "hrsh7th/cmp-buffer", commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
+		{ "hrsh7th/nvim-cmp" },
+		{ "hrsh7th/cmp-buffer" },
 		{ "hrsh7th/cmp-vsnip" },
 		{ "hrsh7th/vim-vsnip" },
 		{ "github/copilot.vim" },
 
 		{
-			"nvim-lualine/lualine.nvim",
-			config = function(_, opts)
-				require("lualine").setup(opts)
+			"akinsho/bufferline.nvim",
+			init = function()
+				require("bufferline").setup({
+					options = {
+						separator_style = "thin",
+						buffer_close_icon = "",
+						modified_icon = "",
+						truncate_names = false,
+					},
+				})
 			end,
 		},
-		--{
-		--	"vim-airline/vim-airline",
-		--	init = function()
-		--		vim.g["airline#extensions#tabline#enabled"] = 1
-		--		vim.g["airline#extensions#tabline#formatter"] = "unique_tail"
-		--		vim.g["airline_theme"] = "base16_embers"
-		--		vim.g["airline_section_z"] = "%p%%" -- Don't bother with cols, max lineno, etc
-		--	end,
-		--},
-		--{ "vim-airline/vim-airline-themes" },
-
 		{ "junegunn/fzf" },
 		{ "junegunn/fzf.vim" }, --fzf extensions for vim
 		{ "christoomey/vim-tmux-navigator" }, --Navigagte vim splits like tmux
@@ -136,6 +140,9 @@ require("lazy").setup({
 					go = { "goimports", "gofumpt" },
 					lua = { "stylua" },
 					proto = { "clang-format" },
+					javascript = { "eslint_d" },
+					typescript = { "eslint_d" },
+					typescriptreact = { "eslint_d" },
 				},
 			},
 		},
@@ -184,14 +191,6 @@ require("lazy").setup({
 				require("nvim-treesitter.configs").setup(opts)
 			end,
 		},
-	},
-
-	install = { colorscheme = { "habamax" } },
-	-- automatically check for plugin updates
-	checker = {
-		enabled = true,
-		notify = true,
-		frequency = 86400, -- check for updates once a day
 	},
 })
 

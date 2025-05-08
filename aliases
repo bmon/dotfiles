@@ -13,11 +13,11 @@ alias -g ......='../../../../..'
 
 alias ll="ls -l"
 alias la="ls -la"
-alias rg="rg --ignore-case --hidden --max-columns 1000 --max-columns-preview"
+alias rg="rg --ignore-case --hidden --max-columns 1000 --max-columns-preview --ignore-file=$HOME/.rgignore"
 alias k="kubectl"
 alias rp="rsync -ah --info=progress2"
 alias mkdirs="mkdir -p"
-alias gcm="git checkout master && git pull origin"
+alias gcm="git fetch && git checkout $(git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4) && git merge --ff-only"
 
 alias genpasswd="head -c 200 /dev/urandom | shasum | base64 | head -c 32 ; echo"
 alias ebprod="eb status app-production | awk '\$2 == \"Version:\" {print \$3}'"

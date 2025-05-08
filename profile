@@ -23,8 +23,9 @@ if [[ "$WSL_DISTRO_NAME" ]]; then
     fi
 fi
 
-export WD=$HOME/git/mx51
-export WORKDIR=$HOME/git/mx51
+export WD=$HOME/git/anna-money
+export WORKDIR=$HOME/git/anna-money
+
 export DOTS=$HOME/git/dotfiles
 
 export EDITOR=nvim
@@ -38,9 +39,6 @@ export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 export GOPATH="$HOME/go"
 export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
 export GOPRIVATE="github.com/mx51/*"
-
-# rust
-[ -d "$HOME/.cargo" ] && export PATH="$PATH:$HOME/.cargo/bin" && . "$HOME/.cargo/env"
 
 # python
 if command -v pyenv 2>&1 >/dev/null; then
