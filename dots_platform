@@ -1,0 +1,19 @@
+#!/bin/sh
+
+get_platform() {
+  if [ -n "$WSL_DISTRO_NAME" ]; then
+    echo "wsl"
+    return 0
+  fi
+  
+  if [ -f /proc/version ] && grep -i microsoft /proc/version >/dev/null 2>&1; then
+    echo "wsl"
+    return 0
+  fi
+  
+  platform=$(uname -s | tr '[:upper:]' '[:lower:]')
+  echo "$platform"
+  return 0
+}
+
+export DOTS_PLATFORM=$(get_platform)

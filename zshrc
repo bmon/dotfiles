@@ -7,6 +7,13 @@
 # creating tmux panes. This is the reason I don't use oh-my-zsh, for example. I've actually
 # found switching away from oh-my-zsh to be pretty simple.
 
+# dots_platform exports DOTS_PLATFORM allowing dotfiles to load platform specific configuration
+source ~/.dots_platform
+
+# source profile and aliases
+source ~/.profile
+source ~/.profile.private
+source ~/.aliases
 
 THEME="p10k"
 
@@ -46,11 +53,6 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden --follow'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 command -v fzf > /dev/null && source <(fzf --zsh)
 
-# source profile and aliases
-source ~/.profile
-source ~/.profile.private
-source ~/.aliases
-
 # zsh history
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=1000000
@@ -62,7 +64,6 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history # share command history data
 setopt interactivecomments # allow comments on shell
-
 
 # https://wiki.archlinux.org/index.php/Zsh#Key_bindings
 # create a zkbd compatible hash;
