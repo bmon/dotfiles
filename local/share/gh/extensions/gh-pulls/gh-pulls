@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Define the GraphQL query string with a variable for the search query
+GRAPHQL_QUERY='
+  query MyOpenPullRequests($gh_query_var: String!) {
+    search(type: ISSUE, query: $gh_query_var, first: 100) { # first: 100 is max per page
+      nodes {
+        ... on PullRequest {
+          title
+          url
+          additions
+          deletions
+          repository {
+            name
+            owner {
+              login
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+'
+
+# Define the search query for your open PRs
+PR_SEARCH_QUERY="is:open is:pr author:@me"
+
+# Execute the gh api graphql command, piping to jq for formatting
+gh api graphql \
+  -f query="$GRAPHQL_QUERY" \
+  -F gh_query_var="$PR_SEARCH_QUERY" | \
+jq -r '.data.search.nodes[] | "* \(.repository.name) [\(.title)](\(.url)) (+\(.additions) -\(.deletions))"'
