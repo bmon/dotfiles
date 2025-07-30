@@ -112,8 +112,10 @@ fpath=(~/.zsh $fpath)
 
 autoload -Uz compinit && compinit
 
-# launch tmux if not already running.
-if [[ -z "$TMUX" ]]; then
+# launch tmux if not already running, and we are not inside an editor like intellij 
+SKIP_EMULATORS=(JetBrains-JediTerm)
+
+if [[ -z "$TMUX" && ! " ${SKIP_EMULATORS[@]} " =~ " ${TERMINAL_EMULATOR} " ]]; then
     tmux -2 new-session -As main
     tmux has-session &> /dev/null
     if [ $? -eq 1 ]; then

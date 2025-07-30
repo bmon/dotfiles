@@ -155,12 +155,12 @@ require("lazy").setup({
 		{ "tpope/vim-eunuch" }, --QoL commands like :SudoWrite
 		{ "tpope/vim-abolish" }, --case respectful search and replace via :%S
 		{ "ncm2/float-preview.nvim" }, --Floating completion pane
-		{
-			"RaafatTurki/hex.nvim", --Hex editing
-			init = function()
-				require("hex").setup()
-			end,
-		},
+		--{
+		--	"RaafatTurki/hex.nvim", --Hex editing
+		--	init = function()
+		--		require("hex").setup()
+		--	end,
+		--},
 		{
 			"nvim-treesitter/nvim-treesitter",
 			build = ":TSUpdate",
@@ -218,10 +218,11 @@ cmp.setup({
 })
 
 -- Setup lspconfig.
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-local lsp = require("lspconfig")
-lsp.gopls.setup({
-	capabilities = capabilities,
+vim.lsp.config("*", {
+	capabilities = require("cmp_nvim_lsp").default_capabilities(),
+})
+vim.lsp.enable("gopls")
+vim.lsp.config.gopls = {
 	settings = {
 		gopls = {
 			buildFlags = { "-tags=endtoend" },
@@ -236,13 +237,56 @@ lsp.gopls.setup({
 			},
 		},
 	},
-})
-require("lspconfig").ts_ls.setup({ capabilities = capabilities })
-require("lspconfig").vuels.setup({ capabilities = capabilities })
-require("lspconfig").ruff.setup({
+}
+vim.lsp.enable("roslyn_ls")
+vim.lsp.config.roslyn_ls = {
+	cmd = {
+		"dotnet",
+		"/Users/brendan/lib/Microsoft.CodeAnalysis.LanguageServer/content/LanguageServer/osx-arm64/Microsoft.CodeAnalysis.LanguageServer.dll",
+		"--logLevel",
+		"Information",
+		"--extensionLogDirectory",
+		"/tmp/roslyn_ls/logs",
+		"--stdio",
+	},
+}
+vim.lsp.enable("ts_ls")
+vim.lsp.enable("vuels")
+vim.lsp.enable("ruff")
+vim.lsp.enable("dartls")
+vim.lsp.config.dartls = {
+	on_attach = function(client, bufnr)
+		-- Automatically organize imports and apply other fixes on save
+		if client.name == "dartls" then
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = vim.api.nvim_create_augroup("DartLspFixes", { clear = true }),
+				buffer = bufnr,
+				callback = function()
+					vim.lsp.buf.code_action({
+						context = {
+							only = { "source.fixAll" },
+							diagnostics = {},
+						},
+						apply = true,
+					})
+				end,
+			})
+		end
+	end,
+}
+
+local on_attach = function(client, bufnr)
+	if client.name == "ruff" then
+		-- Disable hover in favor of Pyright
+		client.server_capabilities.hoverProvider = false
+	end
+end
+
+vim.lsp.config.ruff = {
 	on_attach = on_attach,
-})
-require("lspconfig").pyright.setup({
+}
+vim.lsp.enable("pyright")
+vim.lsp.config.pyright = {
 	settings = {
 		pyright = {
 			-- Using Ruff's import organizer
@@ -255,14 +299,7 @@ require("lspconfig").pyright.setup({
 			},
 		},
 	},
-})
-
-local on_attach = function(client, bufnr)
-	if client.name == "ruff" then
-		-- Disable hover in favor of Pyright
-		client.server_capabilities.hoverProvider = false
-	end
-end
+}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 	virtual_text = {

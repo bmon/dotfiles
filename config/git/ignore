@@ -1,1 +1,5 @@
 pyrightconfig.json
+.ignore
+_misc/
+
+**/.claude/settings.local.json

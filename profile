@@ -34,6 +34,18 @@ if command -v pyenv 2>&1 >/dev/null; then
     eval "$(pyenv virtualenv-init -)"
 fi
 
+# dotnet
+export PATH="$PATH:$HOME/.dotnet/tools"
+
+# java
+if command -v jenv 2>&1 >/dev/null; then
+    export PATH="$HOME/.jenv/bin:$PATH"
+    eval "$(jenv init -)"
+fi
+
+# dart
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
 # Clouds
 export AWS_REGION="ap-southeast-2"
 
