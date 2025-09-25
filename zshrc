@@ -12,7 +12,6 @@ source ~/.dots_platform
 
 # source profile and aliases
 source ~/.profile
-source ~/.profile.private
 source ~/.aliases
 
 THEME="p10k"

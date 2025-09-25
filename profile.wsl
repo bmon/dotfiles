@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export BROWSER="wslview"
+export GPG_TTY=$(tty)

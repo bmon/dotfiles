@@ -44,3 +44,7 @@ prunehist() {
     echo $(grep -c ".\{${1:-200}\}" $HISTFILE) entries removed
     mv ${HISTFILE}_new $HISTFILE
 }
+
+pycharm () {
+    nohup pycharm $@ 2>&1 > $(mktemp /tmp/pycharm.XXXX) &
+}

@@ -1,6 +1,10 @@
 #!/bin/bash
 
+export DOTS=$HOME/git/dotfiles
+export WD=$HOME/git
+
 source "$HOME/.profile.$DOTS_PLATFORM"
+source "$HOME/.profile.private"
 
 export GNUPGHOME="$HOME/.config/gnupg-$DOTS_PLATFORM"
 
@@ -8,22 +12,17 @@ if [[ -z "$SSH_AUTH_SOCK" ]]; then
     eval $(ssh-agent)
 fi
 
-export WD=$HOME/git/anna-money
-export WORKDIR=$HOME/git/anna-money
-
-export DOTS=$HOME/git/dotfiles
 
 export EDITOR=nvim
 export VISUAL=nvim
 export PAGER="less -S"
 
-# store some custom applications
+# some custom applications
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 
 # golang
 export GOPATH="$HOME/go"
 export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
-export GOPRIVATE="github.com/mx51/*"
 
 # python
 if command -v pyenv 2>&1 >/dev/null; then

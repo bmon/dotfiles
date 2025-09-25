@@ -1,7 +1,0 @@
-{{ range .issues -}}
-{{ $assignee := "" }}{{ if .fields.assignee }}{{ $assignee = index ( .fields.assignee.displayName | split " " ) 0 }}{{ end }}
-{{- .key | printf "%-13s" }}
-{{- if eq .fields.status.name "Open"}}{{ color "green+b"}}{{ else if eq .fields.status.name "In Progress"}}{{ color "blue+b"}}{{ else if or (eq .fields.status.name "Closed") (eq .fields.status.name "Resolved") }}{{color "gray+h"}}{{ else }}{{ color "red+b" }}{{ end }}
-{{- .fields.status.name | printf "%-12s"}} {{ color "reset" }}
-{{- $assignee | printf "%-12s" }} {{ .fields.summary }}
-{{ end }}

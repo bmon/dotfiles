@@ -59,6 +59,7 @@ vim.cmd(
 	"autocmd FileType html,css,scss,scss.css,json,typescript,javascript,coffee,ruby,eruby,yaml,apex,vue setl sw=2 ts=2"
 )
 vim.cmd("autocmd FileType go setl noexpandtab")
+vim.cmd("set autoread")
 vim.cmd("set hidden")
 vim.cmd("set ignorecase")
 vim.cmd("set smartcase")
@@ -74,6 +75,8 @@ vim.cmd("set mouse=")
 vim.cmd("set shiftwidth=4 tabstop=4 expandtab")
 vim.cmd("colorscheme habamax")
 vim.cmd("cabbrev Config e ~/.config/nvim/init.lua")
+
+vim.g.python3_host_prog = "/usr/bin/python3" -- On macos I found vim to be loading very slowly when trying to pick a python provider. Probably a pyenv thing
 
 -- Setup clipboard
 vim.cmd("set clipboard+=unnamedplus")
@@ -103,6 +106,11 @@ require("lazy").setup({
 		frequency = 604800, -- check for updates once a week
 	},
 	spec = {
+		--{
+		--	dir = "/Users/brendan/git/nvim-background-autoread",
+		--	opts = { debounce_duration = 50, debug_logging = false },
+		--},
+		{ "bmon/nvim-background-autoread", opts = {} },
 		{ "neovim/nvim-lspconfig" },
 		{ "hrsh7th/cmp-nvim-lsp" },
 		{ "hrsh7th/nvim-cmp" },
@@ -225,16 +233,14 @@ vim.lsp.enable("gopls")
 vim.lsp.config.gopls = {
 	settings = {
 		gopls = {
+			env = {
+				GOEXPERIMENT = "jsonv2",
+			},
 			buildFlags = { "-tags=endtoend" },
 			gofumpt = true,
 			usePlaceholders = true,
-			allExperiments = true,
 			["local"] = "github.com/mx51",
 			staticcheck = true,
-			analyses = {
-				ST1000 = false, -- Incorrect or missing package comment
-				ST1003 = false, -- Poorly chosen identifier (TsMs)
-			},
 		},
 	},
 }
@@ -251,7 +257,6 @@ vim.lsp.config.roslyn_ls = {
 	},
 }
 vim.lsp.enable("ts_ls")
-vim.lsp.enable("vuels")
 vim.lsp.enable("ruff")
 vim.lsp.enable("dartls")
 vim.lsp.config.dartls = {
@@ -296,6 +301,7 @@ vim.lsp.config.pyright = {
 			analysis = {
 				-- Ignore all files for analysis to exclusively use Ruff for linting
 				ignore = { "*" },
+				logLevel = "Trace",
 			},
 		},
 	},
