@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Date
+date=$(date "+%a %F %R")
+
+# CPU temp
+cpu=$(sensors | grep "Package" | cut -f 1-3,5 -d " ")
+
+# Alsa master volume
+#volume=$(amixer get Master | grep "Right:" | cut -f 7,8 -d " ")
+
+# Battery
+battery_charge=$(cat /sys/class/power_supply/BAT1/capacity)
+battery_status=$(cat /sys/class/power_supply/BAT1/status)
+
+# Status bar
+echo $battery_charge% $battery_status "|" $date

@@ -22,7 +22,7 @@ vim.opt.rtp:prepend(lazypath)
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
-vim.keymap.set("n", "<C-p>", ":Files<CR>", { silent = true })
+vim.keymap.set("n", "<C-p>", "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
 vim.keymap.set("n", "<C-o>", ":bnext <CR>", { silent = true })
 vim.keymap.set("n", "<C-u>", ":bprevious <CR>", { silent = true })
 vim.keymap.set("n", "<C-w>", ":bdelete <CR>")
@@ -134,8 +134,8 @@ require("lazy").setup({
 		},
 		{ "junegunn/fzf" },
 		{ "junegunn/fzf.vim" }, --fzf extensions for vim
+		{ "vim-airline/vim-airline-themes" },
 		{ "christoomey/vim-tmux-navigator" }, --Navigagte vim splits like tmux
-
 		{
 			"stevearc/conform.nvim",
 			opts = {
@@ -163,12 +163,6 @@ require("lazy").setup({
 		{ "tpope/vim-eunuch" }, --QoL commands like :SudoWrite
 		{ "tpope/vim-abolish" }, --case respectful search and replace via :%S
 		{ "ncm2/float-preview.nvim" }, --Floating completion pane
-		--{
-		--	"RaafatTurki/hex.nvim", --Hex editing
-		--	init = function()
-		--		require("hex").setup()
-		--	end,
-		--},
 		{
 			"nvim-treesitter/nvim-treesitter",
 			build = ":TSUpdate",
