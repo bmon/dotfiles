@@ -16,6 +16,7 @@ fi
 export EDITOR=nvim
 export VISUAL=nvim
 export PAGER="less -S"
+export LESS="-RFX" # Less options: -R interpret ANSI colors, -F quit if output fits on screen, -X don't clear screen on exit
 
 # some custom applications
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin"

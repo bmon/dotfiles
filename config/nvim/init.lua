@@ -96,6 +96,12 @@ if vim.fn.executable("clip.exe") == 1 then
 	}
 end
 
+if vim.env.TMUX then
+	vim.g.fzf_layout = { tmux = "90%,70%" }
+else
+	vim.g.fzf_layout = { window = { width = 0.9, height = 0.6 } }
+end
+
 -- Setup lazy.nvim
 require("lazy").setup({
 	install = { colorscheme = { "habamax" } },
@@ -106,12 +112,24 @@ require("lazy").setup({
 		frequency = 604800, -- check for updates once a week
 	},
 	spec = {
-		--{
-		--	dir = "/Users/brendan/git/nvim-background-autoread",
-		--	opts = { debounce_duration = 50, debug_logging = false },
-		--},
 		{ "bmon/nvim-background-autoread", opts = {} },
-		{ "neovim/nvim-lspconfig" },
+		{
+			"mason-org/mason-lspconfig.nvim",
+			opts = {
+				ensure_installed = {
+					"gopls",
+					"ts_ls",
+					"ruff",
+					"pyright",
+					"jdtls",
+					"kotlin_lsp",
+				},
+			},
+			dependencies = {
+				{ "mason-org/mason.nvim", opts = {} },
+				"neovim/nvim-lspconfig",
+			},
+		},
 		{ "hrsh7th/cmp-nvim-lsp" },
 		{ "hrsh7th/nvim-cmp" },
 		{ "hrsh7th/cmp-buffer" },
@@ -252,6 +270,7 @@ vim.lsp.config.roslyn_ls = {
 }
 vim.lsp.enable("ts_ls")
 vim.lsp.enable("ruff")
+vim.lsp.enable("jdtls")
 vim.lsp.enable("dartls")
 vim.lsp.config.dartls = {
 	on_attach = function(client, bufnr)

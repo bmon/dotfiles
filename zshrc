@@ -50,6 +50,12 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=244,underline"
 # fzf is a ctrl-r improvement https://github.com/junegunn/fzf
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden --follow'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+if [[ -n "$TMUX" ]]; then
+	export FZF_TMUX_OPTS="-p 90%,70%"
+	export FZF_DEFAULT_OPTS="--preview 'head -200 {}' --preview-window 'right,50%'"
+fi
+
 command -v fzf > /dev/null && source <(fzf --zsh)
 
 # zsh history
@@ -57,12 +63,12 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
 
-setopt extended_history
-setopt hist_ignore_space
-setopt hist_verify
-setopt inc_append_history
-setopt share_history # share command history data
-setopt interactivecomments # allow comments on shell
+setopt extended_history      # save timestamp and duration for each command
+setopt hist_ignore_space     # don't save commands prefixed with a space
+setopt hist_verify           # expand history substitution before executing
+setopt hist_fcntl_lock       # use fcntl for file locking to prevent corruption
+setopt share_history         # share history between sessions (includes inc_append behavior)
+setopt interactivecomments   # allow comments on shell
 
 # https://wiki.archlinux.org/index.php/Zsh#Key_bindings
 # create a zkbd compatible hash;
