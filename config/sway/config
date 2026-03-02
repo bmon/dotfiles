@@ -205,6 +205,38 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+# Mouse control mode:
+mode "mousekeys" {
+    # j: Left click
+    bindsym j exec 'swaymsg seat - cursor press button1 && swaymsg seat - cursor release button1'
+
+    # k: Move cursor down 40px
+    bindsym k seat - cursor move 0 +40
+
+    # l: Left click
+    bindsym l exec 'swaymsg seat - cursor press button1 && swaymsg seat - cursor release button1'
+
+    # ;: Move cursor up 40px
+    bindsym semicolon seat - cursor move 0 -40
+
+    # Workspace switching
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+
+    # Exit mode
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+m mode "mousekeys"
+
 #
 # Status Bar:
 #
