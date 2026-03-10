@@ -13,7 +13,7 @@ alias -g ......='../../../../..'
 
 alias ll="ls -l"
 alias la="ls -la"
-alias rg="rg --ignore-case --hidden --max-columns 1000 --max-columns-preview --ignore-file=$HOME/.rgignore"
+alias rg="rg --ignore-case --hidden --max-columns 10000 --max-columns-preview --ignore-file=$HOME/.rgignore"
 alias k="kubectl"
 alias rp="rsync -ah --info=progress2"
 alias mkdirs="mkdir -p"

@@ -2,6 +2,9 @@
 
 export PATH="$PATH:$HOME/lib/Microsoft.CodeAnalysis.LanguageServer/content/LanguageServer/osx-arm64"
 export PATH="$PATH:/Applications/Google Chrome.app/Contents/MacOS"
+export PATH="$PATH:$HOME/Library/Android/sdk/platform-tools"
+export PATH="$PATH:$HOME/Library/Android/sdk/emulator"
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 export GPG_TTY=$(tty) # required for macos gpg: https://gist.github.com/repodevs/a18c7bb42b2ab293155aca889d447f1b
@@ -10,4 +13,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
 [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 
-alias claude="/Users/brendan/.claude/local/claude"
+#alias claude="/Users/brendan/.claude/local/claude"

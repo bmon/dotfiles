@@ -63,11 +63,12 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
 
-setopt extended_history      # save timestamp and duration for each command
-setopt hist_ignore_space     # don't save commands prefixed with a space
-setopt hist_verify           # expand history substitution before executing
-setopt hist_fcntl_lock       # use fcntl for file locking to prevent corruption
-setopt share_history         # share history between sessions (includes inc_append behavior)
+setopt extended_history        # save timestamp and duration for each command
+setopt hist_ignore_space       # don't save commands prefixed with a space
+setopt hist_verify             # expand history substitution before executing
+setopt hist_fcntl_lock         # use fcntl for file locking to prevent corruption
+setopt inc_append_history      # write each command to history file immediately
+setopt hist_expire_dups_first  # expire duplicate entries first when trimming
 setopt interactivecomments   # allow comments on shell
 
 # https://wiki.archlinux.org/index.php/Zsh#Key_bindings
