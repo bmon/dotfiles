@@ -3,3 +3,5 @@
 if command -v xmodmap 1>/dev/null 2>&1 && [[ ! -z $DISPLAY ]] && [[ -e ~/.xmodmap ]]; then
     xmodmap ~/.xmodmap
 fi
+
+source /usr/share/nvm/init-nvm.sh

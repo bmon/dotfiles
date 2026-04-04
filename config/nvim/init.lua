@@ -22,7 +22,7 @@ vim.opt.rtp:prepend(lazypath)
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
-vim.keymap.set("n", "<C-p>", "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
+vim.keymap.set("n", "<C-p>", ":Files <CR>", { silent = true })
 vim.keymap.set("n", "<C-o>", ":bnext <CR>", { silent = true })
 vim.keymap.set("n", "<C-u>", ":bprevious <CR>", { silent = true })
 vim.keymap.set("n", "<C-w>", ":bdelete <CR>")
@@ -248,7 +248,7 @@ vim.lsp.config.gopls = {
 			env = {
 				GOEXPERIMENT = "jsonv2",
 			},
-			buildFlags = { "-tags=endtoend" },
+			buildFlags = { "-tags=endtoend,e2e" },
 			gofumpt = true,
 			usePlaceholders = true,
 			["local"] = "github.com/mx51",
