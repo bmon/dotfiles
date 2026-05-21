@@ -7,6 +7,8 @@
 # creating tmux panes. This is the reason I don't use oh-my-zsh, for example. I've actually
 # found switching away from oh-my-zsh to be pretty simple.
 
+source ~/.zshenv
+
 # dots_platform exports DOTS_PLATFORM allowing dotfiles to load platform specific configuration
 source ~/.dots_platform
 
@@ -57,11 +59,6 @@ if [[ -n "$TMUX" ]]; then
 fi
 
 command -v fzf > /dev/null && source <(fzf --zsh)
-
-# zsh history
-HISTFILE=$HOME/.zsh_history
-HISTSIZE=1000000
-SAVEHIST=1000000
 
 setopt extended_history        # save timestamp and duration for each command
 setopt hist_ignore_space       # don't save commands prefixed with a space
